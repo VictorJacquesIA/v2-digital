@@ -24,12 +24,12 @@ const navLinks = [
 ];
 
 const services = [
-  "Landing Pages",
-  "Sites Institucionais",
-  "Páginas para Campanhas",
-  "Sites para Negócios Locais",
-  "Reformulação Visual",
-  "Manutenção Mensal",
+  "Site de Alta Conversão",
+  "Copy Personalizada",
+  "Design Profissional",
+  "Integração com WhatsApp",
+  "SEO Local",
+  "Publicação Online",
 ];
 
 export default function Footer() {

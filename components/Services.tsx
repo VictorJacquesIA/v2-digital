@@ -2,53 +2,17 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Rocket, Building2, Megaphone, MapPin, RefreshCw, Wrench, ArrowRight } from "lucide-react";
+import { Rocket, Check, ArrowRight } from "lucide-react";
 
 const WA = "https://wa.me/5500000000000?text=Olá!%20Tenho%20interesse%20em%20um%20serviço.";
 
-const services = [
-  {
-    icon: <Rocket size={26} />,
-    title: "Landing Pages de Alta Conversão",
-    desc: "Páginas focadas em um único objetivo: transformar visitantes em leads ou clientes. Estrutura, copy e design alinhados para maximizar resultados.",
-    gradient: "linear-gradient(135deg, #E91E8C, #C2185B)",
-    tag: "Mais popular",
-  },
-  {
-    icon: <Building2 size={26} />,
-    title: "Sites Institucionais",
-    desc: "Presença completa para sua empresa na internet. Apresenta seus serviços, sua história e sua equipe com profissionalismo e credibilidade.",
-    gradient: "linear-gradient(135deg, #1E90FF, #0D47A1)",
-    tag: null,
-  },
-  {
-    icon: <Megaphone size={26} />,
-    title: "Páginas para Campanhas",
-    desc: "Páginas criadas para acompanhar anúncios no Google ou Instagram. Aumentam a taxa de conversão das suas campanhas pagas.",
-    gradient: "linear-gradient(135deg, #9C27B0, #6A1B9A)",
-    tag: null,
-  },
-  {
-    icon: <MapPin size={26} />,
-    title: "Sites para Negócios Locais",
-    desc: "Presença digital focada para quem atende uma região específica. Atraia clientes próximos e se destaque na sua cidade.",
-    gradient: "linear-gradient(135deg, #00BCD4, #006064)",
-    tag: null,
-  },
-  {
-    icon: <RefreshCw size={26} />,
-    title: "Reformulação Visual",
-    desc: "Modernizamos sites existentes com novo design, nova copy e nova estrutura. Sua empresa atualizada sem começar do zero.",
-    gradient: "linear-gradient(135deg, #FF9800, #E65100)",
-    tag: null,
-  },
-  {
-    icon: <Wrench size={26} />,
-    title: "Manutenção e Suporte Mensal",
-    desc: "Alterações, atualizações e melhorias contínuas para manter seu site sempre funcionando e convertendo ao máximo.",
-    gradient: "linear-gradient(135deg, #4CAF50, #1B5E20)",
-    tag: null,
-  },
+const includes = [
+  "Estrutura estratégica de conversão",
+  "Copy personalizada para o seu negócio",
+  "Design moderno e profissional",
+  "Integração com WhatsApp",
+  "SEO local",
+  "Publicação pronta para receber clientes",
 ];
 
 export default function Services() {
@@ -72,96 +36,141 @@ export default function Services() {
           transition={{ duration: 0.55 }}
           style={{ textAlign: "center", marginBottom: "3.5rem" }}
         >
-          <span className="section-label">Serviços</span>
+          <span className="section-label">Serviço</span>
           <h2 className="section-title" style={{ fontFamily: "var(--font-space)", marginBottom: "1rem" }}>
-            O que <span className="gradient-text">criamos</span>
+            Site de Alta Conversão para{" "}
+            <span className="gradient-text">Negócios Locais</span>
           </h2>
           <p className="section-subtitle" style={{ margin: "0 auto" }}>
-            Soluções digitais completas para cada etapa do crescimento do seu negócio.
+            Uma página completa, focada em um único objetivo: transformar visitantes em contatos qualificados.
           </p>
         </motion.div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem" }}>
-          {services.map((s, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              style={{
-                padding: "2rem",
-                borderRadius: "18px",
-                background: "rgba(12,16,40,0.6)",
-                border: "1px solid rgba(255,255,255,0.06)",
-                position: "relative",
-                overflow: "hidden",
-              }}
-              whileHover={{ y: -6, borderColor: "rgba(255,255,255,0.12)" }}
-            >
-              {/* Top glow line */}
-              <div style={{ position: "absolute", top: 0, left: "10%", right: "10%", height: "1px", background: s.gradient, opacity: 0.5 }} />
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55, delay: 0.15 }}
+          style={{
+            maxWidth: "720px",
+            margin: "0 auto",
+            padding: "2.5rem",
+            borderRadius: "20px",
+            background: "rgba(12,16,40,0.6)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Top glow line */}
+          <div style={{
+            position: "absolute",
+            top: 0,
+            left: "8%",
+            right: "8%",
+            height: "1px",
+            background: "linear-gradient(135deg, #E91E8C, #C2185B)",
+            opacity: 0.6,
+          }} />
 
-              {s.tag && (
+          {/* Tag */}
+          <span style={{
+            position: "absolute",
+            top: "1.5rem",
+            right: "1.5rem",
+            padding: "0.25rem 0.75rem",
+            borderRadius: "100px",
+            fontSize: "0.7rem",
+            fontWeight: 600,
+            background: "rgba(233,30,140,0.15)",
+            border: "1px solid rgba(233,30,140,0.3)",
+            color: "var(--pink-light)",
+          }}>
+            Mais popular
+          </span>
+
+          {/* Icon */}
+          <div style={{
+            width: "54px",
+            height: "54px",
+            borderRadius: "14px",
+            background: "linear-gradient(135deg, #E91E8C, #C2185B)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            marginBottom: "1.5rem",
+            boxShadow: "0 8px 24px rgba(233,30,140,0.25)",
+          }}>
+            <Rocket size={24} />
+          </div>
+
+          {/* Includes list */}
+          <p style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--pink-light)", marginBottom: "1rem" }}>
+            O que está incluso
+          </p>
+          <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem 0", display: "grid", gap: "0.65rem" }}>
+            {includes.map((item, i) => (
+              <li key={i} style={{ display: "flex", alignItems: "center", gap: "0.65rem", fontSize: "0.9rem", color: "var(--text-muted)" }}>
                 <span style={{
-                  position: "absolute",
-                  top: "1.25rem",
-                  right: "1.25rem",
-                  padding: "0.25rem 0.75rem",
-                  borderRadius: "100px",
-                  fontSize: "0.7rem",
-                  fontWeight: 600,
+                  flexShrink: 0,
+                  width: "20px",
+                  height: "20px",
+                  borderRadius: "50%",
                   background: "rgba(233,30,140,0.15)",
                   border: "1px solid rgba(233,30,140,0.3)",
-                  color: "var(--pink-light)",
-                }}>
-                  {s.tag}
-                </span>
-              )}
-
-              <div style={{
-                width: "52px",
-                height: "52px",
-                borderRadius: "14px",
-                background: s.gradient,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#fff",
-                marginBottom: "1.25rem",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
-              }}>
-                {s.icon}
-              </div>
-
-              <h3 style={{ fontFamily: "var(--font-space)", fontSize: "1.05rem", fontWeight: 600, marginBottom: "0.75rem", color: "#fff" }}>
-                {s.title}
-              </h3>
-              <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", lineHeight: 1.7, marginBottom: "1.5rem" }}>
-                {s.desc}
-              </p>
-
-              <a
-                href={WA}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: "inline-flex",
+                  display: "flex",
                   alignItems: "center",
-                  gap: "0.4rem",
-                  fontSize: "0.825rem",
-                  fontWeight: 600,
-                  color: "var(--pink-light)",
-                  textDecoration: "none",
-                  transition: "gap 0.2s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.gap = "0.7rem")}
-                onMouseLeave={(e) => (e.currentTarget.style.gap = "0.4rem")}
-              >
-                Solicitar orçamento <ArrowRight size={14} />
-              </a>
-            </motion.div>
-          ))}
-        </div>
+                  justifyContent: "center",
+                }}>
+                  <Check size={11} color="var(--pink-light)" />
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+
+          {/* Notice */}
+          <p style={{
+            fontSize: "0.8rem",
+            color: "rgba(255,255,255,0.35)",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            paddingTop: "1.25rem",
+            marginBottom: "1.75rem",
+            lineHeight: 1.6,
+          }}>
+            O site é preparado para gerar contatos — os resultados dependem da quantidade de visitantes que chegam até ele.
+          </p>
+
+          {/* CTA */}
+          <a
+            href={WA}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              padding: "0.75rem 1.5rem",
+              borderRadius: "100px",
+              background: "linear-gradient(135deg, #E91E8C, #C2185B)",
+              color: "#fff",
+              fontWeight: 600,
+              fontSize: "0.875rem",
+              textDecoration: "none",
+              transition: "opacity 0.2s, gap 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = "0.85";
+              e.currentTarget.style.gap = "0.75rem";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = "1";
+              e.currentTarget.style.gap = "0.5rem";
+            }}
+          >
+            Solicitar orçamento <ArrowRight size={15} />
+          </a>
+        </motion.div>
       </div>
     </section>
   );

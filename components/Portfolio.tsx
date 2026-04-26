@@ -10,7 +10,8 @@ const projects = [
   {
     title: "Academia FitForce",
     niche: "Academia & Fitness",
-    desc: "Landing page de alta conversão com foco em matrícula online e captação de leads.",
+    objective: "Objetivo",
+    focus: "Captar leads para matrícula",
     gradient: "linear-gradient(135deg, #E91E8C 0%, #FF6B35 100%)",
     icon: "🏋️",
     tags: ["Landing Page", "Fitness"],
@@ -19,7 +20,8 @@ const projects = [
   {
     title: "AutoCenter Silva",
     niche: "Oficina Mecânica",
-    desc: "Site institucional com agendamento de serviços e destaque dos diferenciais da oficina.",
+    objective: "Foco",
+    focus: "Agendamentos de serviços",
     gradient: "linear-gradient(135deg, #1E90FF 0%, #00BCD4 100%)",
     icon: "🔧",
     tags: ["Site Institucional", "Automotivo"],
@@ -28,7 +30,8 @@ const projects = [
   {
     title: "Barbearia Kings",
     niche: "Barbearia Premium",
-    desc: "Página moderna e masculina com agendamento online e galeria de cortes em destaque.",
+    objective: "Foco",
+    focus: "Agendamentos online",
     gradient: "linear-gradient(135deg, #2C3E50 0%, #4a4a6a 100%)",
     icon: "✂️",
     tags: ["Landing Page", "Beleza"],
@@ -37,7 +40,8 @@ const projects = [
   {
     title: "Estética Renata",
     niche: "Clínica Estética",
-    desc: "Site elegante com apresentação dos tratamentos, depoimentos e botão de agendamento.",
+    objective: "Estrutura",
+    focus: "Para conversão e agendamentos",
     gradient: "linear-gradient(135deg, #C2185B 0%, #9C27B0 100%)",
     icon: "✨",
     tags: ["Site Institucional", "Saúde"],
@@ -46,7 +50,8 @@ const projects = [
   {
     title: "Climatiza Ar",
     niche: "Instalação de Ar-Condicionado",
-    desc: "Landing page focada em orçamentos com formulário e call-to-action direto para WhatsApp.",
+    objective: "Objetivo",
+    focus: "Captar orçamentos via WhatsApp",
     gradient: "linear-gradient(135deg, #00BCD4 0%, #1E90FF 100%)",
     icon: "❄️",
     tags: ["Landing Page", "Serviços"],
@@ -55,7 +60,8 @@ const projects = [
   {
     title: "Studio Lívia",
     niche: "Studio de Beleza",
-    desc: "Página feminina e sofisticada com portfólio de trabalhos e agendamento simplificado.",
+    objective: "Estrutura",
+    focus: "Para conversão",
     gradient: "linear-gradient(135deg, #E91E8C 0%, #9C27B0 100%)",
     icon: "💅",
     tags: ["Landing Page", "Beleza"],
@@ -167,9 +173,14 @@ export default function Portfolio() {
                 <h3 style={{ fontFamily: "var(--font-space)", fontSize: "1.05rem", fontWeight: 600, marginBottom: "0.5rem", color: "#fff" }}>
                   {p.title}
                 </h3>
-                <p style={{ fontSize: "0.825rem", color: "var(--text-muted)", lineHeight: 1.6, marginBottom: "1.25rem" }}>
-                  {p.desc}
-                </p>
+                <div style={{ marginBottom: "1.25rem" }}>
+                  <span style={{ fontSize: "0.7rem", fontWeight: 600, color: p.accent, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                    {p.objective}:
+                  </span>{" "}
+                  <span style={{ fontSize: "0.825rem", color: "var(--text-muted)" }}>
+                    {p.focus}
+                  </span>
+                </div>
                 <a
                   href={WA}
                   target="_blank"

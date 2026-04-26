@@ -80,14 +80,12 @@ export default function Hero() {
                 marginBottom: "1.25rem",
               }}
             >
-              Sites e Landing Pages que{" "}
-              <span className="gradient-text">transformam visitantes</span>{" "}
-              em clientes
+              Seu negócio perde clientes todos os dias sem um site que{" "}
+              <span className="gradient-text">converte</span>
             </motion.h1>
 
             <motion.p {...fadeUp(0.2)} className="section-subtitle" style={{ marginBottom: "1.75rem" }}>
-              A V2 Digital cria páginas modernas, estratégicas e responsivas para
-              empresas que querem vender mais, gerar autoridade e crescer no digital.
+              Criamos páginas estratégicas para negócios locais que querem transformar visitas em contatos reais no WhatsApp.
             </motion.p>
 
             <motion.div {...fadeUp(0.3)} style={{ display: "flex", flexWrap: "wrap", gap: "0.625rem", marginBottom: "2rem" }}>
@@ -115,7 +113,7 @@ export default function Hero() {
 
             <motion.div {...fadeUp(0.4)} style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
               <a href={WA} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                Quero meu site profissional
+                Quero um site que converte
                 <ArrowRight size={17} />
               </a>
               <a href="#servicos" className="btn-outline">
@@ -125,7 +123,7 @@ export default function Hero() {
           </div>
 
           {/* Right — mockups */}
-          <div style={{ position: "relative", height: "500px" }} className="hero-visual">
+          <div style={{ position: "relative", height: "500px", overflow: "visible" }} className="hero-visual">
             {/* Mac image */}
             <motion.div
               initial={{ opacity: 0, x: 40, y: 20 }}
@@ -134,9 +132,9 @@ export default function Hero() {
               className="animate-float"
               style={{
                 position: "absolute",
-                top: "0",
-                right: "0",
-                width: "88%",
+                top: "40px",
+                right: "-8%",
+                width: "95%",
               }}
             >
               <Image
@@ -157,9 +155,9 @@ export default function Hero() {
               className="animate-float-delay"
               style={{
                 position: "absolute",
-                bottom: "10px",
-                left: "0",
-                width: "40%",
+                bottom: "-20px",
+                left: "-4%",
+                width: "38%",
               }}
             >
               <Image
@@ -188,10 +186,10 @@ export default function Hero() {
                 boxShadow: "0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(233,30,140,0.1)",
               }}
             >
-              <div style={{ fontSize: "1.6rem", fontWeight: 700, fontFamily: "var(--font-space)", background: "linear-gradient(135deg, #E91E8C, #1E90FF)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", lineHeight: 1 }}>
-                +150%
+              <div style={{ fontSize: "1rem", fontWeight: 700, fontFamily: "var(--font-space)", background: "linear-gradient(135deg, #E91E8C, #1E90FF)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", lineHeight: 1.2 }}>
+                Estrutura
               </div>
-              <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.45)", marginTop: "2px" }}>em conversões</div>
+              <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.45)", marginTop: "2px" }}>validada</div>
             </motion.div>
 
             {/* Floating notification */}

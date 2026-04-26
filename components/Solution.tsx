@@ -52,13 +52,13 @@ export default function Solution() {
             A solução
           </span>
           <h2 className="section-title" style={{ fontFamily: "var(--font-space)", marginBottom: "1rem" }}>
-            A V2 Digital cria sua{" "}
-            <span className="gradient-text-blue">presença online</span>{" "}
-            com estratégia
+            Um site pensado para {" "}
+            <span className="gradient-text-blue">atrair, convencer e gerar</span>{" "}
+            contatos
           </h2>
           <p className="section-subtitle" style={{ margin: "0 auto" }}>
-            Desenvolvemos sites e landing pages pensados para vender com os olhos,
-            transmitir confiança e facilitar a decisão do cliente.
+            Desenvolvemos páginas com estrutura estratégica, design profissional e copy focada em 
+            conversão - preparadas para transformar visitantes em oportunidades de negócio.
           </p>
         </motion.div>
 

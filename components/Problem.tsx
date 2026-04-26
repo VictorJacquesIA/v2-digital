@@ -8,14 +8,14 @@ import { AlertCircle, TrendingDown, MessageSquareOff, Star, Clock } from "lucide
 const problems = [
   {
     icon: <AlertCircle size={22} />,
-    title: "Cliente não encontra informações claras",
-    desc: "Visitantes chegam e saem sem entender quem você é ou o que você oferece.",
+    title: "Cliente não encontra você no Google",
+    desc: "Sem um site, seu negócio simplesmente não aparece quando alguém procura",
     color: "#E91E8C",
   },
   {
     icon: <Star size={22} />,
     title: "Falta de autoridade online",
-    desc: "Sem um site profissional, sua empresa parece menor do que realmente é.",
+    desc: "Sem um pagina profissional, sua empresa parece menor do que realmente é.",
     color: "#1E90FF",
   },
   {
@@ -32,8 +32,8 @@ const problems = [
   },
   {
     icon: <Clock size={22} />,
-    title: "Perda de oportunidades diárias",
-    desc: "Cada dia sem presença digital é mais um cliente que escolheu a concorrência.",
+    title: "Dependência de redes sociais",
+    desc: "Você fica refém de algoritmos e alcance limitado.",
     color: "#E91E8C",
   },
 ];
@@ -68,8 +68,8 @@ export default function Problem() {
             <span className="gradient-text">apenas do Instagram</span>
           </h2>
           <p className="section-subtitle" style={{ margin: "0 auto" }}>
-            Muitos negócios perdem clientes todos os dias por não terem uma página
-            profissional, clara e preparada para converter visitantes em contatos reais.
+            Muitos negócios locais perdem oportunidades todos os dias por não terem uma 
+            presença digital estruturada e preparada para conversão.
           </p>
         </motion.div>
 
