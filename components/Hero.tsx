@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Zap, Smartphone, Target } from "lucide-react";
+import Image from "next/image";
 
 const WA = "https://wa.me/5500000000000?text=Olá!%20Quero%20criar%20meu%20site%20profissional.";
 
@@ -125,7 +126,7 @@ export default function Hero() {
 
           {/* Right — mockups */}
           <div style={{ position: "relative", height: "500px" }} className="hero-visual">
-            {/* Main browser */}
+            {/* Mac image */}
             <motion.div
               initial={{ opacity: 0, x: 40, y: 20 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
@@ -136,42 +137,16 @@ export default function Hero() {
                 top: "0",
                 right: "0",
                 width: "88%",
-                borderRadius: "14px",
-                overflow: "hidden",
-                border: "1px solid rgba(255,255,255,0.09)",
-                boxShadow: "0 30px 80px rgba(0,0,0,0.55), 0 0 50px rgba(30,144,255,0.08)",
               }}
             >
-              {/* Browser bar */}
-              <div style={{ background: "#0C1028", padding: "10px 14px", display: "flex", alignItems: "center", gap: "10px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <div style={{ display: "flex", gap: "6px" }}>
-                  {["#E91E8C", "#FFB800", "#00CC66"].map((c, i) => (
-                    <span key={i} style={{ width: "10px", height: "10px", borderRadius: "50%", background: c, display: "block" }} />
-                  ))}
-                </div>
-                <div style={{ flex: 1, background: "rgba(255,255,255,0.05)", borderRadius: "6px", padding: "4px 12px", fontSize: "11px", color: "rgba(255,255,255,0.35)", letterSpacing: "0.02em" }}>
-                  seusite.com.br
-                </div>
-              </div>
-              {/* Content preview */}
-              <div style={{ background: "#070B1E", padding: "22px 18px", minHeight: "230px" }}>
-                <div style={{ width: "55%", height: "13px", background: "linear-gradient(90deg, #E91E8C, #1E90FF)", borderRadius: "6px", marginBottom: "14px" }} />
-                <div style={{ width: "78%", height: "8px", background: "rgba(255,255,255,0.07)", borderRadius: "4px", marginBottom: "8px" }} />
-                <div style={{ width: "64%", height: "8px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", marginBottom: "22px" }} />
-                <div style={{ display: "flex", gap: "10px", marginBottom: "22px" }}>
-                  <div style={{ width: "130px", height: "38px", background: "linear-gradient(135deg, #E91E8C, #1E90FF)", borderRadius: "8px" }} />
-                  <div style={{ width: "100px", height: "38px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "8px" }} />
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
-                  {[
-                    "rgba(233,30,140,0.13)",
-                    "rgba(30,144,255,0.13)",
-                    "rgba(255,255,255,0.04)",
-                  ].map((bg, i) => (
-                    <div key={i} style={{ height: "70px", background: bg, border: "1px solid rgba(255,255,255,0.05)", borderRadius: "8px" }} />
-                  ))}
-                </div>
-              </div>
+              <Image
+                src="/mac.png"
+                alt="Mockup site profissional"
+                width={700}
+                height={500}
+                style={{ width: "100%", height: "auto", objectFit: "contain" }}
+                priority
+              />
             </motion.div>
 
             {/* Mobile mockup */}
@@ -185,21 +160,15 @@ export default function Hero() {
                 bottom: "10px",
                 left: "0",
                 width: "40%",
-                borderRadius: "20px",
-                overflow: "hidden",
-                border: "1px solid rgba(255,255,255,0.1)",
-                boxShadow: "0 25px 60px rgba(0,0,0,0.6), 0 0 30px rgba(233,30,140,0.1)",
               }}
             >
-              <div style={{ background: "#0C1028", padding: "10px", display: "flex", justifyContent: "center", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                <div style={{ width: "40px", height: "4px", background: "rgba(255,255,255,0.15)", borderRadius: "2px" }} />
-              </div>
-              <div style={{ background: "#070B1E", padding: "14px 12px" }}>
-                <div style={{ height: "110px", background: "linear-gradient(135deg, rgba(233,30,140,0.18), rgba(30,144,255,0.18))", borderRadius: "10px", marginBottom: "10px" }} />
-                <div style={{ width: "80%", height: "6px", background: "rgba(255,255,255,0.08)", borderRadius: "3px", marginBottom: "6px" }} />
-                <div style={{ width: "60%", height: "6px", background: "rgba(255,255,255,0.05)", borderRadius: "3px", marginBottom: "14px" }} />
-                <div style={{ height: "32px", background: "linear-gradient(135deg, #E91E8C, #1E90FF)", borderRadius: "7px" }} />
-              </div>
+              <Image
+                src="/iphone.png"
+                alt="Mockup mobile"
+                width={300}
+                height={500}
+                style={{ width: "100%", height: "auto", objectFit: "contain" }}
+              />
             </motion.div>
 
             {/* Floating stat */}

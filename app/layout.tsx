@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     "A V2 Digital cria sites e landing pages modernos, estratégicos e responsivos para empresas que querem vender mais, gerar autoridade e crescer no digital.",
   keywords:
     "criação de sites, landing pages, agência digital, sites profissionais, marketing digital, presença online",
+  icons: {
+    icon: "/favicon.png",
+  },
   openGraph: {
     title: "V2 Digital | Sites que Transformam Visitantes em Clientes",
     description:

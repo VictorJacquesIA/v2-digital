@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, MessageCircle } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
 import Image from "next/image";
 
 const links = [
@@ -74,7 +75,7 @@ export default function Navbar() {
             className="btn-primary"
             style={{ padding: "0.6rem 1.4rem", fontSize: "0.85rem", borderRadius: "10px" }}
           >
-            <MessageCircle size={15} />
+            <WhatsAppIcon size={15} />
             WhatsApp
           </a>
         </nav>
@@ -120,7 +121,7 @@ export default function Navbar() {
                 className="btn-primary"
                 style={{ marginTop: "0.5rem", justifyContent: "center" }}
               >
-                <MessageCircle size={16} />
+                <WhatsAppIcon size={16} />
                 Falar no WhatsApp
               </a>
             </div>

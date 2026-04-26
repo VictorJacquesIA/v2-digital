@@ -1,7 +1,8 @@
 "use client";
 
-import { MessageCircle, Mail, ArrowUp, ExternalLink } from "lucide-react";
+import { Mail, ArrowUp, ExternalLink } from "lucide-react";
 import Image from "next/image";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
 
 const IgIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -58,7 +59,7 @@ export default function Footer() {
             {/* Social */}
             <div style={{ display: "flex", gap: "0.75rem" }}>
               {[
-                { href: WA, icon: <MessageCircle size={18} />, label: "WhatsApp", color: "#25D366" },
+                { href: WA, icon: <WhatsAppIcon size={18} />, label: "WhatsApp", color: "#25D366" },
                 { href: IG, icon: <IgIcon />, label: "Instagram", color: "#E91E8C" },
                 { href: EMAIL, icon: <Mail size={18} />, label: "E-mail", color: "#1E90FF" },
               ].map((s) => (
@@ -160,7 +161,7 @@ export default function Footer() {
                 onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(37,211,102,0.15)")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(37,211,102,0.08)")}
               >
-                <MessageCircle size={18} />
+                <WhatsAppIcon size={18} />
                 WhatsApp
               </a>
               <a

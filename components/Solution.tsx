@@ -2,13 +2,14 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Palette, PenTool, Smartphone, MessageCircle, TrendingUp, Globe } from "lucide-react";
+import { Palette, PenTool, Smartphone, TrendingUp, Globe } from "lucide-react";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
 
 const solutions = [
   { icon: <Palette size={22} />, title: "Design profissional", desc: "Visual moderno, marcante e alinhado com a identidade da sua marca." },
   { icon: <PenTool size={22} />, title: "Copy estratégica", desc: "Textos pensados para comunicar valor, gerar conexão e estimular a ação." },
   { icon: <Smartphone size={22} />, title: "Site responsivo", desc: "Funciona perfeitamente em celulares, tablets e desktops." },
-  { icon: <MessageCircle size={22} />, title: "Botões para WhatsApp", desc: "CTAs estratégicos que conectam o visitante direto ao seu atendimento." },
+  { icon: <WhatsAppIcon size={22} />, title: "Botões para WhatsApp", desc: "CTAs estratégicos que conectam o visitante direto ao seu atendimento." },
   { icon: <TrendingUp size={22} />, title: "Estrutura de conversão", desc: "Cada elemento pensado para guiar o visitante até a tomada de decisão." },
   { icon: <Globe size={22} />, title: "Publicação na internet", desc: "Seu site no ar com domínio e hospedagem configurados e prontos." },
 ];
