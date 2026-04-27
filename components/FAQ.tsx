@@ -109,7 +109,7 @@ function FAQItem({ faq, idx }: { faq: typeof faqs[0]; idx: number }) {
 export default function FAQ() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const WA = "https://wa.me/5500000000000?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20os%20serviços.";
+  const WA = "https://wa.me/5548991472902?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20os%20serviços.";
 
   return (
     <section

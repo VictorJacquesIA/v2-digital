@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Zap, Smartphone, Target } from "lucide-react";
 import Image from "next/image";
 
-const WA = "https://wa.me/5500000000000?text=Olá!%20Quero%20criar%20meu%20site%20profissional.";
+const WA = "https://wa.me/5548991472902?text=Olá!%20Quero%20criar%20meu%20site%20profissional.";
 
 const pills = [
   { icon: <Zap size={13} />, text: "Alta Performance" },

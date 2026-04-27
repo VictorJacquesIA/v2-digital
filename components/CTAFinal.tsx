@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 
-const WA = "https://wa.me/5500000000000?text=Olá!%20Quero%20criar%20meu%20site%20profissional%20com%20a%20V2%20Digital.";
+const WA = "https://wa.me/5548991472902?text=Olá!%20Quero%20criar%20meu%20site%20profissional%20com%20a%20V2%20Digital.";
 
 export default function CTAFinal() {
   const ref = useRef(null);

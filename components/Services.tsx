@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Rocket, Check, ArrowRight } from "lucide-react";
 
-const WA = "https://wa.me/5500000000000?text=Olá!%20Tenho%20interesse%20em%20um%20serviço.";
+const WA = "https://wa.me/5548991472902?text=Olá!%20Tenho%20interesse%20em%20um%20serviço.";
 
 const includes = [
   "Estrutura estratégica de conversão",

@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, ArrowUp, ExternalLink } from "lucide-react";
+import { ArrowUp, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 
@@ -12,9 +12,8 @@ const IgIcon = () => (
   </svg>
 );
 
-const WA = "https://wa.me/5500000000000?text=Olá!%20Quero%20criar%20meu%20site%20profissional.";
-const IG = "https://instagram.com/v2digital";
-const EMAIL = "mailto:contato@v2digital.com.br";
+const WA = "https://wa.me/5548991472902?text=Olá!%20Quero%20criar%20meu%20site%20profissional.";
+const IG = "https://www.instagram.com/v2digital.site/";
 
 const navLinks = [
   { label: "Serviços", href: "#servicos" },
@@ -61,7 +60,6 @@ export default function Footer() {
               {[
                 { href: WA, icon: <WhatsAppIcon size={18} />, label: "WhatsApp", color: "#25D366" },
                 { href: IG, icon: <IgIcon />, label: "Instagram", color: "#E91E8C" },
-                { href: EMAIL, icon: <Mail size={18} />, label: "E-mail", color: "#1E90FF" },
               ].map((s) => (
                 <a
                   key={s.label}
@@ -187,28 +185,6 @@ export default function Footer() {
               >
                 <IgIcon />
                 @v2digital
-              </a>
-              <a
-                href={EMAIL}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  padding: "0.875rem 1.25rem",
-                  borderRadius: "12px",
-                  background: "rgba(30,144,255,0.08)",
-                  border: "1px solid rgba(30,144,255,0.2)",
-                  color: "var(--blue-light)",
-                  textDecoration: "none",
-                  fontSize: "0.875rem",
-                  fontWeight: 600,
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(30,144,255,0.15)")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(30,144,255,0.08)")}
-              >
-                <Mail size={18} />
-                contato@v2digital.com.br
               </a>
             </div>
           </div>

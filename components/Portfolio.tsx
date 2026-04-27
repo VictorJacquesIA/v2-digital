@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ExternalLink } from "lucide-react";
 
-const WA = "https://wa.me/5500000000000?text=Olá!%20Vi%20o%20portfólio%20e%20quero%20saber%20mais.";
+const WA = "https://wa.me/5548991472902?text=Olá!%20Vi%20o%20portfólio%20e%20quero%20saber%20mais.";
 
 const projects = [
   {

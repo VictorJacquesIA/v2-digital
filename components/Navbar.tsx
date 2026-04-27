@@ -13,7 +13,7 @@ const links = [
   { label: "FAQ", href: "#faq" },
 ];
 
-const WA = "https://wa.me/5500000000000?text=Olá!%20Quero%20criar%20meu%20site%20profissional.";
+const WA = "https://wa.me/5548991472902?text=Olá!%20Quero%20criar%20meu%20site%20profissional.";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
