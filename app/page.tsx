@@ -4,7 +4,7 @@ import Problem from "@/components/Problem";
 import Solution from "@/components/Solution";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
-import Portfolio from "@/components/Portfolio";
+// import Portfolio from "@/components/Portfolio";
 import Differentials from "@/components/Differentials";
 import FAQ from "@/components/FAQ";
 import CTAFinal from "@/components/CTAFinal";
@@ -21,7 +21,7 @@ export default function Home() {
         <Solution />
         <Services />
         <Process />
-        <Portfolio />
+        {/* <Portfolio /> */}
         <Differentials />
         <FAQ />
         <CTAFinal />
