@@ -154,10 +154,16 @@ export default function Portfolio() {
       </header>
 
       {/* Seção 1 — Quem é a V2 */}
-      <section style={{ padding: "5rem 0 4rem", borderBottom: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden" }}>
+      <section style={{ padding: "5rem 0 0", borderBottom: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden" }}>
+        <style>{`
+          .portifolio-hero-img { display: block; }
+          @media (max-width: 768px) { .portifolio-hero-img { display: none; } }
+        `}</style>
+
         <div style={{ position: "absolute", width: "600px", height: "600px", borderRadius: "50%", background: "radial-gradient(circle, rgba(233,30,140,0.1) 0%, transparent 65%)", top: "-200px", right: "-100px", pointerEvents: "none" }} />
+
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 1.5rem" }}>
-          <motion.div {...fadeUp(0.1)} style={{ maxWidth: "640px" }}>
+          <motion.div {...fadeUp(0.1)} style={{ maxWidth: "520px", paddingBottom: "4rem" }}>
             <span style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#E91E8C", marginBottom: "1rem", display: "block" }}>
               {tx.whoLabel}
             </span>
@@ -171,6 +177,30 @@ export default function Portfolio() {
             <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.75 }}>{tx.whoDesc2}</p>
           </motion.div>
         </div>
+
+        {/* Imagem decorativa — direita, cortada na borda inferior da seção */}
+        <motion.div
+          className="portifolio-hero-img"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: 0.25, ease: "easeOut" }}
+          style={{
+            position: "absolute",
+            right: "4%",
+            bottom: 0,
+            width: "44%",
+            maxWidth: "520px",
+            pointerEvents: "none",
+          }}
+        >
+          <Image
+            src="/public_portifolio/inicial.png"
+            alt="Preview V2 Digital"
+            width={520}
+            height={420}
+            style={{ objectFit: "contain", objectPosition: "bottom", width: "100%", height: "auto" }}
+          />
+        </motion.div>
       </section>
 
       {/* Seção 2 — Foco em conversão */}
