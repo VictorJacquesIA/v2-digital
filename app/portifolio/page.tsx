@@ -178,27 +178,27 @@ export default function Portfolio() {
           </motion.div>
         </div>
 
-        {/* Imagem decorativa — direita, cortada na borda inferior da seção */}
+        {/* Imagem decorativa — direita, contida dentro da seção */}
         <motion.div
           className="portifolio-hero-img"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.75, delay: 0.25, ease: "easeOut" }}
           style={{
             position: "absolute",
-            right: "4%",
+            top: 0,
             bottom: 0,
-            width: "44%",
-            maxWidth: "520px",
+            right: 0,
+            width: "42%",
+            maxWidth: "500px",
             pointerEvents: "none",
           }}
         >
           <Image
             src="/public_portifolio/inicial.png"
             alt="Preview V2 Digital"
-            width={520}
-            height={420}
-            style={{ objectFit: "contain", objectPosition: "bottom", width: "100%", height: "auto" }}
+            fill
+            style={{ objectFit: "contain", objectPosition: "right bottom" }}
           />
         </motion.div>
       </section>
