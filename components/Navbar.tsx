@@ -46,7 +46,7 @@ export default function Navbar() {
       <div className="section-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         {/* Logo */}
         <a href="#" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-          <Image src="/logo.png" alt="V2 Digital" width={260} height={87} style={{ objectFit: "contain", objectPosition: "left", filter: "contrast(1.3) brightness(1.15)" }} className="navbar-logo" priority />
+          <Image src="/logo.png" alt="V2 Digital" width={260} height={87} style={{ objectFit: "contain", objectPosition: "left" }} className="navbar-logo" priority />
         </a>
 
         {/* Desktop nav */}

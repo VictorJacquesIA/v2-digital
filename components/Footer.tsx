@@ -52,8 +52,11 @@ export default function Footer() {
             <a href="#" style={{ textDecoration: "none", display: "inline-block", marginBottom: "1.25rem" }}>
               <Image src="/logo.png" alt="V2 Digital" width={120} height={40} style={{ objectFit: "contain" }} />
             </a>
-            <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", lineHeight: 1.7, maxWidth: "280px", marginBottom: "1.75rem" }}>
-              Criamos sites e landing pages profissionais para empresas que querem vender mais e crescer no digital.
+            <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", lineHeight: 1.7, maxWidth: "280px", marginBottom: "0.75rem" }}>
+              Agência de web design e estúdio de criação digital em Imbituba, SC. Desenvolvimento de sites e landing pages para negócios em Imbituba, Garopaba, Laguna e toda Santa Catarina.
+            </p>
+            <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.25)", marginBottom: "1.75rem" }}>
+              Imbituba · Garopaba · Laguna · Florianópolis · SC · Brasil
             </p>
             {/* Social */}
             <div style={{ display: "flex", gap: "0.75rem" }}>

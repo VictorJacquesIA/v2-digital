@@ -33,14 +33,15 @@ export default function WhatsAppFloat() {
         textDecoration: "none",
         boxShadow: "0 4px 24px rgba(37,211,102,0.45), 0 0 0 0 rgba(37,211,102,0.4)",
         animation: "wa-pulse 2.5s ease-in-out 3s infinite",
+        background: "linear-gradient(135deg, #25D366, #128C7E)",
       }}
     >
       <WhatsAppIcon size={26} />
       <style>{`
         @keyframes wa-pulse {
-          0% { box-shadow: 0 4px 24px rgba(37,211,102,0.4), 0 0 0 0 rgba(37,211,102,0.35); }
-          70% { box-shadow: 0 4px 24px rgba(37,211,102,0.4), 0 0 0 14px rgba(37,211,102,0); }
-          100% { box-shadow: 0 4px 24px rgba(37,211,102,0.4), 0 0 0 0 rgba(37,211,102,0); }
+          0% { box-shadow: 0 8px 32px rgba(37,211,102,0.5), 0 0 0 0 rgba(37,211,102,0.4); }
+          70% { box-shadow: 0 8px 32px rgba(37,211,102,0.5), 0 0 0 18px rgba(37,211,102,0); }
+          100% { box-shadow: 0 8px 32px rgba(37,211,102,0.5), 0 0 0 0 rgba(37,211,102,0); }
         }
       `}</style>
     </motion.a>

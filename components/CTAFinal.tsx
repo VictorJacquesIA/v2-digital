@@ -45,11 +45,13 @@ export default function CTAFinal() {
             maxWidth: "760px",
             margin: "0 auto",
             padding: "4rem 2rem",
-            borderRadius: "24px",
-            background: "linear-gradient(160deg, rgba(233,30,140,0.08), rgba(30,144,255,0.06))",
-            border: "1px solid rgba(233,30,140,0.15)",
+            borderRadius: "28px",
+            background: "linear-gradient(160deg, rgba(233,30,140,0.07) 0%, rgba(12,16,40,0.8) 40%, rgba(30,144,255,0.05) 100%)",
+            border: "1px solid rgba(233,30,140,0.18)",
             position: "relative",
             overflow: "hidden",
+            boxShadow: "0 0 80px rgba(233,30,140,0.08), 0 32px 64px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)",
+            backdropFilter: "blur(20px)",
           }}
         >
           {/* Top glow border */}
