@@ -273,9 +273,3 @@ body::after {
 img {
   transition: opacity 0.4s ease;
 }
-img[loading] {
-  opacity: 0;
-}
-img.loaded {
-  opacity: 1;
-}
