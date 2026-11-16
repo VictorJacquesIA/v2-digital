@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import symbolRed from "@/assets/ds/v2-symbol-red.svg.asset.json";
-import logoWhite from "@/assets/ds/v2-digital-logo-white.svg.asset.json";
+import symbolRed from "@/assets/ds/v2-symbol-red.svg";
+import logoWhite from "@/assets/ds/v2-digital-logo-white.svg";
 import { Button } from "./ui";
 import { whatsappLink } from "@/lib/contact";
 
@@ -15,7 +15,7 @@ export function Shell({ children }: { children: ReactNode }) {
     <div id="topo">
       <header className="v2-header">
         <a href="#topo" className="v2-header-logo" aria-label="V2 Digital">
-          <img src={symbolRed.url} alt="V2 Digital" />
+          <img src={symbolRed} alt="V2 Digital" />
         </a>
         <nav className="v2-header-nav">
           {navLinks.map((l) => (
@@ -28,7 +28,7 @@ export function Shell({ children }: { children: ReactNode }) {
       </header>
       <main>{children}</main>
       <footer className="v2-footer">
-        <img className="v2-footer-logo" src={logoWhite.url} alt="V2 Digital" />
+        <img className="v2-footer-logo" src={logoWhite} alt="V2 Digital" />
         <nav className="v2-footer-nav">
           {navLinks.map((l) => <a key={l.href} href={l.href}>{l.label}</a>)}
           <a href={whatsappLink("Olá! Vim pelo site da V2 Digital.")}>WhatsApp</a>

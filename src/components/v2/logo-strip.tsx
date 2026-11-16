@@ -1,11 +1,11 @@
-import celebra from "@/assets/ds/cliente-celebra.png.asset.json";
-import mazaro from "@/assets/ds/cliente-mazaro.png.asset.json";
-import ro from "@/assets/ds/cliente-ro-trim.png.asset.json";
-import chefpet from "@/assets/ds/cliente-chefpet.webp.asset.json";
-import livmiart from "@/assets/ds/cliente-livmiart.png.asset.json";
-import ummaisum from "@/assets/ds/cliente-ummaisum.webp.asset.json";
-import nfcorretor from "@/assets/ds/cliente-nfcorretor.webp.asset.json";
-import barbara from "@/assets/ds/cliente-barbara.png.asset.json";
+import celebra from "@/assets/ds/cliente-celebra.png";
+import mazaro from "@/assets/ds/cliente-mazaro.png";
+import ro from "@/assets/ds/cliente-ro-trim.png";
+import chefpet from "@/assets/ds/cliente-chefpet.webp";
+import livmiart from "@/assets/ds/cliente-livmiart.png";
+import ummaisum from "@/assets/ds/cliente-ummaisum.webp";
+import nfcorretor from "@/assets/ds/cliente-nfcorretor.webp";
+import barbara from "@/assets/ds/cliente-barbara.png";
 
 /**
  * Faixa de logos de clientes (marquee), com o nome da empresa abaixo de cada logo.
@@ -26,14 +26,14 @@ export const CLIENT_LOGOS: Array<{
   wide?: boolean;
   big?: boolean;
 }> = [
-  { name: "Celebra Cestas SC", servico: "Tráfego pago", src: celebra.url, tone: "padrao" },
-  { name: "Livmiart Store", servico: "Site", src: livmiart.url, tone: "invertida" },
-  { name: "Mazaro", servico: "Site + Tráfego pago", src: mazaro.url, tone: "padrao", wide: true },
-  { name: "Rô Espaço Terapêutico", servico: "Site + Google Meu Negócio", src: ro.url, tone: "escura", big: true },
-  { name: "Chef Pet Gourmet", servico: "Site + Tráfego pago", src: chefpet.url, tone: "chefpet" },
-  { name: "Um mais UM", servico: "Tráfego pago", src: ummaisum.url, tone: "padrao" },
-  { name: "NF Corretor de Imóveis", servico: "Tráfego pago", src: nfcorretor.url, tone: "clara", wide: true },
-  { name: "Bárbara Souza Corretora de Imóveis", servico: "Tráfego pago", src: barbara.url, tone: "padrao" },
+  { name: "Celebra Cestas SC", servico: "Tráfego pago", src: celebra, tone: "padrao" },
+  { name: "Livmiart Store", servico: "Site", src: livmiart, tone: "invertida" },
+  { name: "Mazaro", servico: "Site + Tráfego pago", src: mazaro, tone: "padrao", wide: true },
+  { name: "Rô Espaço Terapêutico", servico: "Site + Google Meu Negócio", src: ro, tone: "escura", big: true },
+  { name: "Chef Pet Gourmet", servico: "Site + Tráfego pago", src: chefpet, tone: "chefpet" },
+  { name: "Um mais UM", servico: "Tráfego pago", src: ummaisum, tone: "padrao" },
+  { name: "NF Corretor de Imóveis", servico: "Tráfego pago", src: nfcorretor, tone: "clara", wide: true },
+  { name: "Bárbara Souza Corretora de Imóveis", servico: "Tráfego pago", src: barbara, tone: "padrao" },
 ];
 
 function Logo({ logo }: { logo: (typeof CLIENT_LOGOS)[number] }) {

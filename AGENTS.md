@@ -1,6 +1,6 @@
 # Agent rules
 - Visual styling comes from the migrated V2 tokens and `v2-*`/`ds-*` classes at the end of src/styles.css; reuse them instead of ad hoc colors, because they are the brand's source of truth.
-- Brand images live as Lovable Asset pointers in src/assets/ds; icons are local SVGs in src/assets/icons.
+- Brand images are regular files in src/assets/ds, imported directly (Vite returns the URL); icons are local SVGs in src/assets/icons.
 - The public site is one page at `/` using in-page anchors for its sections; the brand guide is a rules source, not a page in the site. Keep new sections as anchor targets on that page instead of adding routes.
 - Use the capture helper in the diagnostic gate to await a confirmed insert before unlocking; returned Data API errors must block access just like network failures.
 - The private leads panel lives at /leads under _authenticated with /auth sign-in; admin access comes from public.user_roles (owner email granted by trigger), never from the client.
