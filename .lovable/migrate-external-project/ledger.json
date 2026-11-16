@@ -1,0 +1,5 @@
+[
+ {"capability":"code","source":"V2 design system archive (tokens, CSS bundle, component docs)","outcome":"recreated as React components + documentation site","status":"verified_pending_build","next_action":"none"},
+ {"capability":"assets","source":"logos, modelos, destaques, plaquinhas, guia","outcome":"uploaded to Lovable Assets","status":"migrated","next_action":"none"},
+ {"capability":"database/auth/storage/integrations","source":"none detected","outcome":"not applicable (static design system)","status":"accepted","next_action":"none"}
+]

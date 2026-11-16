@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794777546554,
+      "tag": "0000_create_leads_diagnostico",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794786411321,
+      "tag": "0001_painel_leads_admin",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794787206014,
+      "tag": "0002_diagnosticos_cache",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794787782955,
+      "tag": "0003_crm_leads",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794788992550,
+      "tag": "0004_estrategia_link_cliente",
+      "breakpoints": true
+    }
+  ]
+}
