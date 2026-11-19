@@ -2,57 +2,18 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { generateResponse, GatewayError } from "@lovable.dev/ai-gateway";
 import { expiracaoDe } from "./estrategia-link";
+import { GeminiSobrecarregado, gerarJsonGemini } from "./gemini";
 
 export type Estrategia = { raioX: string; mapa: string; ia: string; plano: string; geradaEm: string };
 export type ResultadoEstrategia = { ok: true; estrategia: Estrategia; token: string; expira: string } | { ok: false; erro: string };
 
-// Reservas quando o modelo principal está sobrecarregado: os "lite" costumam ter folga no plano gratuito.
-const MODELOS_RESERVA = ["gemini-3.5-flash-lite", "gemini-flash-lite-latest"];
-
-class GeminiSobrecarregado extends Error {}
-
 // Gemini gratuito (Google AI Studio) quando GEMINI_API_KEY existe — funciona fora do Lovable (ex.: Vercel).
-// Em 503/429/500 (sobrecarga ou cota) ou 404 (modelo retirado), tenta o próximo modelo da lista.
-async function gerarComGemini(chave: string, input: string): Promise<string> {
-  const principal = process.env["GEMINI_MODEL"] || "gemini-3.8-flash";
-  const modelos = [principal, ...MODELOS_RESERVA.filter((m) => m !== principal)];
-  let ultimoErro: Error = new GeminiSobrecarregado("Nenhum modelo do Gemini respondeu.");
-  for (const modelo of modelos) {
-    try {
-      return await chamarGemini(chave, modelo, input);
-    } catch (e) {
-      const status = (e as { status?: number }).status ?? 0;
-      if (![404, 429, 500, 503].includes(status)) throw e;
-      console.warn(`Gemini ${modelo} indisponível (${status}), tentando o próximo modelo.`);
-      ultimoErro = new GeminiSobrecarregado((e as Error).message);
-    }
-  }
-  throw ultimoErro;
-}
-
-async function chamarGemini(chave: string, modelo: string, input: string): Promise<string> {
-  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-goog-api-key": chave },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: INSTRUCOES }] },
-      contents: [{ role: "user", parts: [{ text: input }] }],
-      generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: "OBJECT",
-          required: ["raioX", "mapa", "ia", "plano"],
-          properties: { raioX: { type: "STRING" }, mapa: { type: "STRING" }, ia: { type: "STRING" }, plano: { type: "STRING" } },
-        },
-      },
-    }),
+const gerarComGemini = (chave: string, input: string) =>
+  gerarJsonGemini(chave, INSTRUCOES, input, {
+    type: "OBJECT",
+    required: ["raioX", "mapa", "ia", "plano"],
+    properties: { raioX: { type: "STRING" }, mapa: { type: "STRING" }, ia: { type: "STRING" }, plano: { type: "STRING" } },
   });
-  if (!r.ok) {
-    throw Object.assign(new Error(`Gemini ${modelo} ${r.status}: ${(await r.text()).slice(0, 300)}`), { status: r.status });
-  }
-  const j = (await r.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
-  return (j.candidates?.[0]?.content?.parts ?? []).map((p) => p.text ?? "").join("");
-}
 
 async function gerarComGateway(input: string): Promise<string> {
   const resp = await generateResponse({

@@ -6,8 +6,10 @@ import { Button } from "./ui";
 
 // Novas telas do CRM entram aqui conforme ficam prontas
 const ITENS = [
+  { to: "/crm", r: "Visão geral" },
   { to: "/crm/funil", r: "Funil" },
   { to: "/crm/agenda", r: "Agenda" },
+  { to: "/crm/prospeccao", r: "Prospecção" },
   { to: "/leads", r: "Contatos do diagnóstico" },
 ] as const;
 
@@ -26,7 +28,7 @@ export function CrmNav() {
   return (
     <nav className="crm-nav" aria-label="Seções do CRM">
       {ITENS.map((i) => (
-        <Link key={i.to} to={i.to} className="crm-nav-link" activeProps={{ className: "crm-nav-link crm-nav-on", "aria-current": "page" }}>
+        <Link key={i.to} to={i.to} className="crm-nav-link" activeOptions={{ exact: i.to === "/crm" }} activeProps={{ className: "crm-nav-link crm-nav-on", "aria-current": "page" }}>
           {i.r}
         </Link>
       ))}

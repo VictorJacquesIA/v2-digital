@@ -14,8 +14,10 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedLeadsRouteImport } from './routes/_authenticated/leads'
 import { Route as EstrategiaTokenRouteImport } from './routes/estrategia/$token'
+import { Route as AuthenticatedCrmIndexRouteImport } from './routes/_authenticated/crm/index'
 import { Route as AuthenticatedCrmAgendaRouteImport } from './routes/_authenticated/crm/agenda'
 import { Route as AuthenticatedCrmFunilRouteImport } from './routes/_authenticated/crm/funil'
+import { Route as AuthenticatedCrmProspeccaoRouteImport } from './routes/_authenticated/crm/prospeccao'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,6 +43,11 @@ const EstrategiaTokenRoute = EstrategiaTokenRouteImport.update({
   path: '/estrategia/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCrmIndexRoute = AuthenticatedCrmIndexRouteImport.update({
+  id: '/crm/',
+  path: '/crm/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCrmAgendaRoute = AuthenticatedCrmAgendaRouteImport.update({
   id: '/crm/agenda',
   path: '/crm/agenda',
@@ -51,6 +58,12 @@ const AuthenticatedCrmFunilRoute = AuthenticatedCrmFunilRouteImport.update({
   path: '/crm/funil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCrmProspeccaoRoute =
+  AuthenticatedCrmProspeccaoRouteImport.update({
+    id: '/crm/prospeccao',
+    path: '/crm/prospeccao',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,6 +72,8 @@ export interface FileRoutesByFullPath {
   '/estrategia/$token': typeof EstrategiaTokenRoute
   '/crm/agenda': typeof AuthenticatedCrmAgendaRoute
   '/crm/funil': typeof AuthenticatedCrmFunilRoute
+  '/crm/prospeccao': typeof AuthenticatedCrmProspeccaoRoute
+  '/crm/': typeof AuthenticatedCrmIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -67,6 +82,8 @@ export interface FileRoutesByTo {
   '/estrategia/$token': typeof EstrategiaTokenRoute
   '/crm/agenda': typeof AuthenticatedCrmAgendaRoute
   '/crm/funil': typeof AuthenticatedCrmFunilRoute
+  '/crm/prospeccao': typeof AuthenticatedCrmProspeccaoRoute
+  '/crm': typeof AuthenticatedCrmIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,6 +94,8 @@ export interface FileRoutesById {
   '/estrategia/$token': typeof EstrategiaTokenRoute
   '/_authenticated/crm/agenda': typeof AuthenticatedCrmAgendaRoute
   '/_authenticated/crm/funil': typeof AuthenticatedCrmFunilRoute
+  '/_authenticated/crm/prospeccao': typeof AuthenticatedCrmProspeccaoRoute
+  '/_authenticated/crm/': typeof AuthenticatedCrmIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -87,6 +106,8 @@ export interface FileRouteTypes {
     | '/estrategia/$token'
     | '/crm/agenda'
     | '/crm/funil'
+    | '/crm/prospeccao'
+    | '/crm/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -95,6 +116,8 @@ export interface FileRouteTypes {
     | '/estrategia/$token'
     | '/crm/agenda'
     | '/crm/funil'
+    | '/crm/prospeccao'
+    | '/crm'
   id:
     | '__root__'
     | '/'
@@ -104,6 +127,8 @@ export interface FileRouteTypes {
     | '/estrategia/$token'
     | '/_authenticated/crm/agenda'
     | '/_authenticated/crm/funil'
+    | '/_authenticated/crm/prospeccao'
+    | '/_authenticated/crm/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -150,6 +175,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EstrategiaTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/crm/': {
+      id: '/_authenticated/crm/'
+      path: '/crm'
+      fullPath: '/crm/'
+      preLoaderRoute: typeof AuthenticatedCrmIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/crm/agenda': {
       id: '/_authenticated/crm/agenda'
       path: '/crm/agenda'
@@ -164,6 +196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCrmFunilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/crm/prospeccao': {
+      id: '/_authenticated/crm/prospeccao'
+      path: '/crm/prospeccao'
+      fullPath: '/crm/prospeccao'
+      preLoaderRoute: typeof AuthenticatedCrmProspeccaoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -171,12 +210,16 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedLeadsRoute: typeof AuthenticatedLeadsRoute
   AuthenticatedCrmAgendaRoute: typeof AuthenticatedCrmAgendaRoute
   AuthenticatedCrmFunilRoute: typeof AuthenticatedCrmFunilRoute
+  AuthenticatedCrmProspeccaoRoute: typeof AuthenticatedCrmProspeccaoRoute
+  AuthenticatedCrmIndexRoute: typeof AuthenticatedCrmIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLeadsRoute: AuthenticatedLeadsRoute,
   AuthenticatedCrmAgendaRoute: AuthenticatedCrmAgendaRoute,
   AuthenticatedCrmFunilRoute: AuthenticatedCrmFunilRoute,
+  AuthenticatedCrmProspeccaoRoute: AuthenticatedCrmProspeccaoRoute,
+  AuthenticatedCrmIndexRoute: AuthenticatedCrmIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

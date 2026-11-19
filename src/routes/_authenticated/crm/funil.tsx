@@ -38,6 +38,7 @@ import {
 } from "@/lib/crm/funil";
 import { CHAVE_OPS, chaveAtividades, useOportunidades } from "@/lib/crm/consultas";
 import { TarefasDaOportunidade } from "@/components/v2/crm-tarefas";
+import { CopilotoDaOportunidade } from "@/components/v2/crm-sugestoes";
 
 export const Route = createFileRoute("/_authenticated/crm/funil")({
   head: () => ({
@@ -314,6 +315,8 @@ function Gaveta({ op, onFechar, onMover }: { op: Oportunidade; onFechar: () => v
             {msg && <span className="leads-sub" role="status">{msg}</span>}
           </div>
         </form>
+
+        <CopilotoDaOportunidade oportunidadeId={op.id} />
 
         <TarefasDaOportunidade oportunidadeId={op.id} />
 
