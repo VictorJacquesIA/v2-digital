@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/v2/ui";
+import { CrmNav } from "@/components/v2/crm-nav";
 import { gerarEstrategia, type Estrategia } from "@/lib/leads.functions";
 import { tempoRestante } from "@/lib/estrategia-link";
 
@@ -125,6 +126,7 @@ function LeadsPage() {
         </div>
         <Button variant="secondary" size="sm" onClick={sair}>Sair</Button>
       </header>
+      <CrmNav />
       {admin.isLoading && <p className="ds-body">Carregando…</p>}
       {admin.data && !admin.data.ok && <p className="ds-body">A conta {admin.data.email} não tem acesso a este painel.</p>}
       {leads.error && <p className="ds-body">Não foi possível carregar os contatos.</p>}

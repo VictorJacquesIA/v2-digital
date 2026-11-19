@@ -14,6 +14,222 @@ export type Database = {
   }
   public: {
     Tables: {
+      crm_atividades: {
+        Row: {
+          created_at: string
+          descricao: string
+          id: string
+          metadados: Json
+          oportunidade_id: string
+          tipo: string
+        }
+        Insert: {
+          created_at?: string
+          descricao: string
+          id?: string
+          metadados?: Json
+          oportunidade_id: string
+          tipo: string
+        }
+        Update: {
+          created_at?: string
+          descricao?: string
+          id?: string
+          metadados?: Json
+          oportunidade_id?: string
+          tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_atividades_oportunidade_id_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "crm_oportunidades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_metas: {
+        Row: {
+          created_at: string
+          id: string
+          mes: string
+          meta_fechados: number
+          meta_novos: number
+          meta_propostas: number
+          meta_receita: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mes: string
+          meta_fechados?: number
+          meta_novos?: number
+          meta_propostas?: number
+          meta_receita?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mes?: string
+          meta_fechados?: number
+          meta_novos?: number
+          meta_propostas?: number
+          meta_receita?: number
+        }
+        Relationships: []
+      }
+      crm_oportunidades: {
+        Row: {
+          created_at: string
+          etapa: string
+          etapa_desde: string
+          fechado_em: string | null
+          id: string
+          lead_diagnostico_id: string | null
+          maps_place_id: string | null
+          motivo_perda: string | null
+          nicho: string | null
+          nome_contato: string | null
+          nome_empresa: string
+          origem: string
+          regiao: string | null
+          score_oportunidade: number
+          servicos_interesse: string[]
+          updated_at: string
+          valor_mensal: number
+          whatsapp: string | null
+          whatsapp_norm: string | null
+        }
+        Insert: {
+          created_at?: string
+          etapa?: string
+          etapa_desde?: string
+          fechado_em?: string | null
+          id?: string
+          lead_diagnostico_id?: string | null
+          maps_place_id?: string | null
+          motivo_perda?: string | null
+          nicho?: string | null
+          nome_contato?: string | null
+          nome_empresa: string
+          origem?: string
+          regiao?: string | null
+          score_oportunidade?: number
+          servicos_interesse?: string[]
+          updated_at?: string
+          valor_mensal?: number
+          whatsapp?: string | null
+        }
+        Update: {
+          created_at?: string
+          etapa?: string
+          etapa_desde?: string
+          fechado_em?: string | null
+          id?: string
+          lead_diagnostico_id?: string | null
+          maps_place_id?: string | null
+          motivo_perda?: string | null
+          nicho?: string | null
+          nome_contato?: string | null
+          nome_empresa?: string
+          origem?: string
+          regiao?: string | null
+          score_oportunidade?: number
+          servicos_interesse?: string[]
+          updated_at?: string
+          valor_mensal?: number
+          whatsapp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_oportunidades_lead_diagnostico_id_fkey"
+            columns: ["lead_diagnostico_id"]
+            isOneToOne: false
+            referencedRelation: "leads_diagnostico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_sugestoes_ia: {
+        Row: {
+          acao: string
+          conteudo: Json
+          created_at: string
+          id: string
+          oportunidade_id: string
+          papel: string
+          status: string
+        }
+        Insert: {
+          acao: string
+          conteudo?: Json
+          created_at?: string
+          id?: string
+          oportunidade_id: string
+          papel: string
+          status?: string
+        }
+        Update: {
+          acao?: string
+          conteudo?: Json
+          created_at?: string
+          id?: string
+          oportunidade_id?: string
+          papel?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_sugestoes_ia_oportunidade_id_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "crm_oportunidades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_tarefas: {
+        Row: {
+          concluida_em: string | null
+          created_at: string
+          criada_por_ia: boolean
+          descricao: string
+          id: string
+          oportunidade_id: string
+          tipo: string
+          vence_em: string
+        }
+        Insert: {
+          concluida_em?: string | null
+          created_at?: string
+          criada_por_ia?: boolean
+          descricao: string
+          id?: string
+          oportunidade_id: string
+          tipo: string
+          vence_em: string
+        }
+        Update: {
+          concluida_em?: string | null
+          created_at?: string
+          criada_por_ia?: boolean
+          descricao?: string
+          id?: string
+          oportunidade_id?: string
+          tipo?: string
+          vence_em?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_tarefas_oportunidade_id_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "crm_oportunidades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       diagnosticos_cache: {
         Row: {
           created_at: string

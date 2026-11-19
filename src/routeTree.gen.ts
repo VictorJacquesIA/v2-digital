@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedLeadsRouteImport } from './routes/_authenticated/leads'
 import { Route as EstrategiaTokenRouteImport } from './routes/estrategia/$token'
+import { Route as AuthenticatedCrmFunilRouteImport } from './routes/_authenticated/crm/funil'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -39,18 +40,25 @@ const EstrategiaTokenRoute = EstrategiaTokenRouteImport.update({
   path: '/estrategia/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCrmFunilRoute = AuthenticatedCrmFunilRouteImport.update({
+  id: '/crm/funil',
+  path: '/crm/funil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/leads': typeof AuthenticatedLeadsRoute
   '/estrategia/$token': typeof EstrategiaTokenRoute
+  '/crm/funil': typeof AuthenticatedCrmFunilRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/leads': typeof AuthenticatedLeadsRoute
   '/estrategia/$token': typeof EstrategiaTokenRoute
+  '/crm/funil': typeof AuthenticatedCrmFunilRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,12 +67,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/leads': typeof AuthenticatedLeadsRoute
   '/estrategia/$token': typeof EstrategiaTokenRoute
+  '/_authenticated/crm/funil': typeof AuthenticatedCrmFunilRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/leads' | '/estrategia/$token'
+  fullPaths: '/' | '/auth' | '/leads' | '/estrategia/$token' | '/crm/funil'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/leads' | '/estrategia/$token'
+  to: '/' | '/auth' | '/leads' | '/estrategia/$token' | '/crm/funil'
   id:
     | '__root__'
     | '/'
@@ -72,6 +81,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/leads'
     | '/estrategia/$token'
+    | '/_authenticated/crm/funil'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,15 +128,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EstrategiaTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/crm/funil': {
+      id: '/_authenticated/crm/funil'
+      path: '/crm/funil'
+      fullPath: '/crm/funil'
+      preLoaderRoute: typeof AuthenticatedCrmFunilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedLeadsRoute: typeof AuthenticatedLeadsRoute
+  AuthenticatedCrmFunilRoute: typeof AuthenticatedCrmFunilRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLeadsRoute: AuthenticatedLeadsRoute,
+  AuthenticatedCrmFunilRoute: AuthenticatedCrmFunilRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

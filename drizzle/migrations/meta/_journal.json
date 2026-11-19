@@ -36,6 +36,13 @@
       "when": 1794788992550,
       "tag": "0004_estrategia_link_cliente",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795053852889,
+      "tag": "0005_crm_agencia",
+      "breakpoints": true
     }
   ]
 }
