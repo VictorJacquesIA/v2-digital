@@ -7,6 +7,7 @@ import { Button } from "./ui";
 // Novas telas do CRM entram aqui conforme ficam prontas
 const ITENS = [
   { to: "/crm/funil", r: "Funil" },
+  { to: "/crm/agenda", r: "Agenda" },
   { to: "/leads", r: "Contatos do diagnóstico" },
 ] as const;
 

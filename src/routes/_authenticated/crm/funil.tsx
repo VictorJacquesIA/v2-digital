@@ -36,6 +36,8 @@ import {
   type Etapa,
   type Oportunidade,
 } from "@/lib/crm/funil";
+import { CHAVE_OPS, chaveAtividades, useOportunidades } from "@/lib/crm/consultas";
+import { TarefasDaOportunidade } from "@/components/v2/crm-tarefas";
 
 export const Route = createFileRoute("/_authenticated/crm/funil")({
   head: () => ({
@@ -48,8 +50,7 @@ export const Route = createFileRoute("/_authenticated/crm/funil")({
   component: FunilPage,
 });
 
-const CHAVE = ["crm-oportunidades"] as const;
-const COLUNAS = "id, nome_empresa, nome_contato, whatsapp, nicho, regiao, origem, etapa, valor_mensal, servicos_interesse, motivo_perda, score_oportunidade, etapa_desde, fechado_em, lead_diagnostico_id, created_at";
+const CHAVE = CHAVE_OPS;
 
 function FunilPage() {
   const [nova, setNova] = useState(false);
@@ -59,17 +60,6 @@ function FunilPage() {
       {nova && <ModalNova onFechar={() => setNova(false)} />}
     </CrmShell>
   );
-}
-
-function useOportunidades() {
-  return useQuery({
-    queryKey: CHAVE,
-    queryFn: async () => {
-      const { data, error } = await supabase.from("crm_oportunidades").select(COLUNAS);
-      if (error) throw error;
-      return data as Oportunidade[];
-    },
-  });
 }
 
 function useMoverEtapa() {
@@ -91,7 +81,7 @@ function useMoverEtapa() {
     onError: (_e, _v, ctx) => ctx?.antes && qc.setQueryData(CHAVE, ctx.antes),
     onSettled: (_d, _e, { id }) => {
       qc.invalidateQueries({ queryKey: CHAVE });
-      qc.invalidateQueries({ queryKey: ["crm-atividades", id] });
+      qc.invalidateQueries({ queryKey: chaveAtividades(id) });
     },
   });
 }
@@ -248,7 +238,7 @@ function Gaveta({ op, onFechar, onMover }: { op: Oportunidade; onFechar: () => v
   const fechar = useFecharComEsc(onFechar);
 
   const atividades = useQuery({
-    queryKey: ["crm-atividades", op.id],
+    queryKey: chaveAtividades(op.id),
     queryFn: async () => {
       const { data, error } = await supabase
         .from("crm_atividades")
@@ -274,7 +264,7 @@ function Gaveta({ op, onFechar, onMover }: { op: Oportunidade; onFechar: () => v
       const { error } = await supabase.from("crm_atividades").insert({ oportunidade_id: op.id, tipo: "nota", descricao: nota.trim() });
       if (error) throw error;
     },
-    onSuccess: () => { setNota(""); qc.invalidateQueries({ queryKey: ["crm-atividades", op.id] }); },
+    onSuccess: () => { setNota(""); qc.invalidateQueries({ queryKey: chaveAtividades(op.id) }); },
   });
 
   const wa = linkWhatsapp(form.whatsapp);
@@ -324,6 +314,8 @@ function Gaveta({ op, onFechar, onMover }: { op: Oportunidade; onFechar: () => v
             {msg && <span className="leads-sub" role="status">{msg}</span>}
           </div>
         </form>
+
+        <TarefasDaOportunidade oportunidadeId={op.id} />
 
         <section className="crm-historico" aria-label="Histórico">
           <h3 className="leads-bloco-t">Histórico</h3>
