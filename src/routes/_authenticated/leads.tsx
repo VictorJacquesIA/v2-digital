@@ -152,20 +152,20 @@ function LeadsPage() {
                   {visiveis.map((l) => (
                     <Fragment key={l.id}>
                       <tr>
-                        <td>
+                        <td data-rotulo="Última interação">
                           {data(l.ultima_interacao)}
                           {l.interacoes > 1 && <span className="leads-sub">Solicitou {l.interacoes} vezes</span>}
                         </td>
-                        <td>{l.maps_url ? <a href={l.maps_url} target="_blank" rel="noreferrer">{l.business_name || "Ver no Maps"}</a> : l.business_name || "—"}</td>
-                        <td>{l.whatsapp}</td>
-                        <td>{l.indice ?? "—"}</td>
-                        <td>{l.posicao ?? "—"}</td>
-                        <td>
+                        <td data-rotulo="Negócio" className="leads-col-negocio">{l.maps_url ? <a href={l.maps_url} target="_blank" rel="noreferrer">{l.business_name || "Ver no Maps"}</a> : l.business_name || "—"}</td>
+                        <td data-rotulo="WhatsApp">{l.whatsapp}</td>
+                        <td data-rotulo="Nota">{l.indice ?? "—"}</td>
+                        <td data-rotulo="Posição">{l.posicao ?? "—"}</td>
+                        <td data-rotulo="Status">
                           <select className="leads-status" aria-label="Status do contato" value={l.status} onChange={(e) => atualizar(l.id, { status: e.target.value })}>
                             {STATUS.map((s) => <option key={s.v} value={s.v}>{s.r}</option>)}
                           </select>
                         </td>
-                        <td>
+                        <td data-rotulo="Ações" className="leads-col-acoes">
                           <div className="leads-acoes">
                             <Button variant="secondary" size="sm" href={waLink(l.whatsapp, l.business_name)}>WhatsApp</Button>
                             <Button variant="secondary" size="sm" onClick={() => abrirEstrategia(l)}>

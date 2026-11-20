@@ -272,12 +272,12 @@ function Gaveta({ op, onFechar, onMover }: { op: Oportunidade; onFechar: () => v
   return (
     <div className="leads-modal-fundo" onClick={fechar}>
       <aside className="crm-gaveta" role="dialog" aria-modal="true" aria-labelledby="crm-gaveta-t" onClick={(e) => e.stopPropagation()}>
-        <div className="leads-top">
-          <div>
+        <div className="crm-gaveta-topo">
+          <div className="crm-gaveta-titulo">
             <span className="v2-overline site-overline">{rotuloEtapa(op.etapa)} · {rotuloOrigem(op.origem)}</span>
-            <h2 id="crm-gaveta-t" className="ds-h3">{op.nome_empresa}</h2>
+            <h2 id="crm-gaveta-t" className="crm-gaveta-nome">{op.nome_empresa}</h2>
           </div>
-          <button className="leads-nota-btn" onClick={fechar} autoFocus>Fechar</button>
+          <Button variant="secondary" size="sm" onClick={fechar} autoFocus>Fechar</Button>
         </div>
 
         <div className="crm-gaveta-acoes">
