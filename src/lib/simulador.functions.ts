@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { buildReport, mesmoSegmento, segmentoDoNegocio, extrairCidade, type PlaceLike, type SimReport } from "./simulador-score";
 import { CAMPOS, MASK_LISTA, google, listar } from "./google-places";
-import { CAPTURA_FALHOU, capturarWhatsApp, WHATSAPP_INVALIDO, whatsappValido, abreNovoCiclo } from "./lead";
+import { CAPTURA_FALHOU, capturarWhatsApp, limparNome, WHATSAPP_INVALIDO, whatsappValido, abreNovoCiclo } from "./lead";
 
 export type SimResultado =
   | { ok: true; relatorio: SimReport }
@@ -104,13 +104,14 @@ async function completarLead(leadId: string, relatorio: SimReport, businessName:
 }
 
 export const analisarPerfil = createServerFn({ method: "POST" })
-  .inputValidator((data: { mapsUrl?: string; businessName?: string; whatsapp?: string }) => ({
+  .inputValidator((data: { mapsUrl?: string; businessName?: string; nomeContato?: string; whatsapp?: string }) => ({
     mapsUrl: String(data?.mapsUrl ?? "").trim(),
     businessName: String(data?.businessName ?? "").trim(),
+    nomeContato: limparNome(String(data?.nomeContato ?? "")),
     whatsapp: String(data?.whatsapp ?? "").trim(),
   }))
   .handler(async ({ data }): Promise<SimResultado> => {
-    const { mapsUrl, businessName, whatsapp } = data;
+    const { mapsUrl, businessName, nomeContato, whatsapp } = data;
 
     // O diagnóstico só roda depois que o contato fica gravado para a V2.
     // A gravação acontece no servidor: o visitante não tem permissão de
@@ -141,6 +142,7 @@ export const analisarPerfil = createServerFn({ method: "POST" })
               ultima_interacao: new Date().toISOString(),
               maps_url: mapsUrl || null,
               ...(businessName ? { business_name: businessName } : {}),
+              ...(nomeContato ? { nome_contato: nomeContato } : {}),
               ...(novoCiclo && existente.status !== "cliente" ? { status: "novo", atendido: false } : {}),
             })
             .eq("id", existente.id)
@@ -149,7 +151,7 @@ export const analisarPerfil = createServerFn({ method: "POST" })
         }
         return supabaseAdmin
           .from("leads_diagnostico")
-          .insert({ whatsapp: numero, maps_url: mapsUrl || null, business_name: businessName || null })
+          .insert({ whatsapp: numero, maps_url: mapsUrl || null, business_name: businessName || null, nome_contato: nomeContato || null })
           .select("id")
           .single();
       });

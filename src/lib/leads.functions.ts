@@ -1,13 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { generateResponse, GatewayError } from "@lovable.dev/ai-gateway";
 import { expiracaoDe } from "./estrategia-link";
 import { GeminiSobrecarregado, gerarJsonGemini } from "./gemini";
 
 export type Estrategia = { raioX: string; mapa: string; ia: string; plano: string; geradaEm: string };
 export type ResultadoEstrategia = { ok: true; estrategia: Estrategia; token: string; expira: string } | { ok: false; erro: string };
 
-// Gemini gratuito (Google AI Studio) quando GEMINI_API_KEY existe — funciona fora do Lovable (ex.: Vercel).
+// Gemini (Google AI Studio): precisa de GEMINI_API_KEY no .env ou na Vercel.
 const gerarComGemini = (chave: string, input: string) =>
   gerarJsonGemini(chave, INSTRUCOES, input, {
     type: "OBJECT",
@@ -15,34 +14,11 @@ const gerarComGemini = (chave: string, input: string) =>
     properties: { raioX: { type: "STRING" }, mapa: { type: "STRING" }, ia: { type: "STRING" }, plano: { type: "STRING" } },
   });
 
-async function gerarComGateway(input: string): Promise<string> {
-  const resp = await generateResponse({
-    model: "openai/gpt-6-astra",
-    instructions: INSTRUCOES,
-    input,
-    text: { format: { type: "json_schema", name: "estrategia", strict: true, schema: ESQUEMA } },
-  });
-  const r = resp as unknown as { output_text?: string; output?: Array<{ content?: Array<{ type?: string; text?: string }> }> };
-  return r.output_text ?? (r.output ?? []).flatMap((o) => o.content ?? []).filter((c) => c.type === "output_text").map((c) => c.text ?? "").join("");
-}
-
 function novoToken() {
   const b = new Uint8Array(18);
   crypto.getRandomValues(b);
   return Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
 }
-
-const ESQUEMA = {
-  type: "object",
-  additionalProperties: false,
-  required: ["raioX", "mapa", "ia", "plano"],
-  properties: {
-    raioX: { type: "string" },
-    mapa: { type: "string" },
-    ia: { type: "string" },
-    plano: { type: "string" },
-  },
-} as const;
 
 const INSTRUCOES = `Você é estrategista sênior da V2 Digital, agência de marketing local em Imbituba, SC.
 Escreva em português do Brasil, direto, sem jargão, frases curtas, pronto para colar no WhatsApp do cliente ou usar em reunião.
@@ -73,8 +49,9 @@ export const gerarEstrategia = createServerFn({ method: "POST" })
 
     const input = `Dados do negócio vindos do Google Places:\n${JSON.stringify({ negocio: lead.business_name, link: lead.maps_url, ...(lead.dados as object) })}`;
     try {
-      const gemini = process.env["GEMINI_API_KEY"];
-      const texto = gemini ? await gerarComGemini(gemini, input) : await gerarComGateway(input);
+      const gemini = process.env["GEMINI_API_KEY"]?.trim();
+      if (!gemini) return { ok: false, erro: "Configure a GEMINI_API_KEY para gerar a estratégia." };
+      const texto = await gerarComGemini(gemini, input);
       const p = JSON.parse(texto) as Omit<Estrategia, "geradaEm">;
       const agora = new Date();
       const estrategia: Estrategia = { raioX: p.raioX, mapa: p.mapa, ia: p.ia, plano: p.plano, geradaEm: agora.toISOString() };
@@ -88,9 +65,6 @@ export const gerarEstrategia = createServerFn({ method: "POST" })
       return { ok: true, estrategia, token, expira };
     } catch (e) {
       console.error("Falha ao gerar estratégia:", e);
-      if (e instanceof GatewayError && e.code === "payment_required") {
-        return { ok: false, erro: "Os créditos de IA acabaram. Configure a chave gratuita do Gemini para continuar." };
-      }
       if (e instanceof GeminiSobrecarregado) {
         return { ok: false, erro: "O Gemini está sobrecarregado agora (todos os modelos ocupados). Tente de novo em alguns minutos." };
       }

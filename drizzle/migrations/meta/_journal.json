@@ -43,6 +43,13 @@
       "when": 1795053852889,
       "tag": "0005_crm_agencia",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795053853889,
+      "tag": "0006_nome_contato_diagnostico",
+      "breakpoints": true
     }
   ]
 }

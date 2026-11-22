@@ -261,6 +261,7 @@ export type Database = {
           indice: number | null
           interacoes: number
           maps_url: string | null
+          nome_contato: string | null
           notas: string | null
           place_id: string | null
           posicao: string | null
@@ -281,6 +282,7 @@ export type Database = {
           indice?: number | null
           interacoes?: number
           maps_url?: string | null
+          nome_contato?: string | null
           notas?: string | null
           place_id?: string | null
           posicao?: string | null
@@ -301,6 +303,7 @@ export type Database = {
           indice?: number | null
           interacoes?: number
           maps_url?: string | null
+          nome_contato?: string | null
           notas?: string | null
           place_id?: string | null
           posicao?: string | null

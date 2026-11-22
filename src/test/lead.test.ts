@@ -34,3 +34,26 @@ describe("Captura obrigatória para a V2", () => {
     expect(salvar).not.toHaveBeenCalled();
   });
 });
+
+describe("Nome de quem pede o diagnóstico", () => {
+  it("aceita nomes com ao menos 2 letras, inclusive acentuados", async () => {
+    const { nomeValido } = await import("@/lib/lead");
+    expect(nomeValido("Ana")).toBe(true);
+    expect(nomeValido("Zé")).toBe(true);
+    expect(nomeValido("  João Paulo ")).toBe(true);
+  });
+
+  it("recusa vazio, uma letra ou só números", async () => {
+    const { nomeValido } = await import("@/lib/lead");
+    expect(nomeValido("")).toBe(false);
+    expect(nomeValido("   ")).toBe(false);
+    expect(nomeValido("A")).toBe(false);
+    expect(nomeValido("12345")).toBe(false);
+  });
+
+  it("limpa espaços extras e corta em 80 caracteres", async () => {
+    const { limparNome } = await import("@/lib/lead");
+    expect(limparNome("  Maria   da  Silva ")).toBe("Maria da Silva");
+    expect(limparNome("x".repeat(120))).toHaveLength(80);
+  });
+});

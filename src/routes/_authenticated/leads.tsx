@@ -38,10 +38,11 @@ const ABAS = [
   { r: "Arquivados", s: ["arquivado"] },
 ];
 
-function waLink(numero: string, nome: string | null) {
+function waLink(numero: string, nome: string | null, contato?: string | null) {
   const d = numero.replace(/\D/g, "");
   const n = d.startsWith("55") ? d : `55${d}`;
-  const t = `Olá${nome ? `, tudo bem? Aqui é da V2 Digital, vi o diagnóstico da ${nome}` : "! Aqui é da V2 Digital, vi seu diagnóstico"} e queria te mostrar como melhorar sua posição no Google.`;
+  const primeiro = contato?.trim().split(/\s+/)[0];
+  const t = `Olá${primeiro ? ` ${primeiro}` : ""}${nome ? `, tudo bem? Aqui é da V2 Digital, vi o diagnóstico da ${nome}` : "! Aqui é da V2 Digital, vi seu diagnóstico"} e queria te mostrar como melhorar sua posição no Google.`;
   return `https://wa.me/${n}?text=${encodeURIComponent(t)}`;
 }
 
@@ -146,7 +147,7 @@ function LeadsPage() {
             <div className="leads-tabela-wrap">
               <table className="leads-tabela">
                 <thead>
-                  <tr><th>Última interação</th><th>Negócio</th><th>WhatsApp</th><th>Nota</th><th>Posição</th><th>Status</th><th>Ações</th></tr>
+                  <tr><th>Última interação</th><th>Negócio</th><th>Contato</th><th>Nota</th><th>Posição</th><th>Status</th><th>Ações</th></tr>
                 </thead>
                 <tbody>
                   {visiveis.map((l) => (
@@ -157,7 +158,7 @@ function LeadsPage() {
                           {l.interacoes > 1 && <span className="leads-sub">Solicitou {l.interacoes} vezes</span>}
                         </td>
                         <td data-rotulo="Negócio" className="leads-col-negocio">{l.maps_url ? <a href={l.maps_url} target="_blank" rel="noreferrer">{l.business_name || "Ver no Maps"}</a> : l.business_name || "—"}</td>
-                        <td data-rotulo="WhatsApp">{l.whatsapp}</td>
+                        <td data-rotulo="Contato">{l.nome_contato ? <><strong>{l.nome_contato}</strong><br /></> : null}{l.whatsapp}</td>
                         <td data-rotulo="Nota">{l.indice ?? "—"}</td>
                         <td data-rotulo="Posição">{l.posicao ?? "—"}</td>
                         <td data-rotulo="Status">
@@ -167,7 +168,7 @@ function LeadsPage() {
                         </td>
                         <td data-rotulo="Ações" className="leads-col-acoes">
                           <div className="leads-acoes">
-                            <Button variant="secondary" size="sm" href={waLink(l.whatsapp, l.business_name)}>WhatsApp</Button>
+                            <Button variant="secondary" size="sm" href={waLink(l.whatsapp, l.business_name, l.nome_contato)}>WhatsApp</Button>
                             <Button variant="secondary" size="sm" onClick={() => abrirEstrategia(l)}>
                               {l.estrategia ? "Ver estratégia" : "Gerar estratégia de IA"}
                             </Button>

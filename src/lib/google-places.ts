@@ -4,8 +4,6 @@
  */
 import type { PlaceLike } from "./simulador-score";
 
-const GATEWAY = "https://connector-gateway.lovable.dev/google_maps";
-
 export const CAMPOS = [
   "id",
   "displayName",
@@ -25,9 +23,7 @@ export const MASK_LISTA = CAMPOS.split(",").map((c) => `places.${c}`).join(",");
 /* ------------------------------------------------------------------ */
 /* Chamadas ao Google                                                  */
 /*                                                                     */
-/* Com a chave do cliente (GOOGLE_PLACES_API_KEY) salva em Secrets, a   */
-/* chamada vai direto para a Places API. Sem ela, usa a conexão do      */
-/* Google Maps já ligada ao site, pelo gateway.                        */
+/* A chamada vai direto para a Places API com GOOGLE_PLACES_API_KEY.    */
 /* ------------------------------------------------------------------ */
 
 const PLACES = "https://places.googleapis.com";
@@ -39,8 +35,6 @@ export async function google(
   body?: unknown,
 ): Promise<Record<string, unknown>> {
   const minhaChave = process.env["GOOGLE_PLACES_API_KEY"]?.trim();
-  const chaveConexao = process.env["GOOGLE_MAPS_API_KEY"]?.trim();
-  const token = process.env["LOVABLE_API_KEY"]?.trim();
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -51,10 +45,6 @@ export async function google(
   if (minhaChave) {
     url = `${PLACES}${path}`;
     headers["X-Goog-Api-Key"] = minhaChave;
-  } else if (chaveConexao && token) {
-    url = `${GATEWAY}/places${path}`;
-    headers["Authorization"] = `Bearer ${token}`;
-    headers["X-Connection-Api-Key"] = chaveConexao;
   } else {
     throw new Error("A consulta ao Google ainda não está configurada neste site.");
   }

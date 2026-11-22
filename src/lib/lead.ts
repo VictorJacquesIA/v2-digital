@@ -12,6 +12,18 @@ export function whatsappValido(valor: string): boolean {
   return digitos.length >= 10 && digitos.length <= 13;
 }
 
+export const NOME_INVALIDO = "Informe seu nome";
+
+/** Nome de quem pediu o diagnóstico: basta ter ao menos 2 letras. */
+export function nomeValido(valor: string): boolean {
+  return (valor.match(/\p{L}/gu) ?? []).length >= 2;
+}
+
+/** Limpa espaços extras e corta em 80 caracteres. */
+export function limparNome(valor: string): string {
+  return valor.replace(/\s+/g, " ").trim().slice(0, 80);
+}
+
 export const CAPTURA_FALHOU = "Não foi possível salvar seu WhatsApp. Tente novamente para liberar o diagnóstico.";
 
 /**

@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Badge, Button, Input } from "./ui";
 import { whatsappLink } from "@/lib/contact";
 import { AUDITORIA, RESULTADO } from "@/lib/content";
-import { CAPTURA_FALHOU, WHATSAPP_INVALIDO, whatsappValido } from "@/lib/lead";
+import { CAPTURA_FALHOU, NOME_INVALIDO, WHATSAPP_INVALIDO, nomeValido, whatsappValido } from "@/lib/lead";
 import { analisarPerfil, type SimResultado } from "@/lib/simulador.functions";
 import {
   explicacaoCurta,
@@ -249,6 +249,8 @@ export function Simulador() {
   const chamar = useServerFn(analisarPerfil);
   const [mapsUrl, setMapsUrl] = useState("");
   const [businessName, setBusinessName] = useState("");
+  const [nome, setNome] = useState("");
+  const [nomeErro, setNomeErro] = useState("");
   const [whats, setWhats] = useState("");
   const [whatsErro, setWhatsErro] = useState("");
   const [rodando, setRodando] = useState(false);
@@ -263,18 +265,18 @@ export function Simulador() {
 
   async function enviar(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!whatsappValido(whats)) {
-      setWhatsErro(WHATSAPP_INVALIDO);
-      return;
-    }
-    setWhatsErro("");
+    const nomeOk = nomeValido(nome);
+    const whatsOk = whatsappValido(whats);
+    setNomeErro(nomeOk ? "" : NOME_INVALIDO);
+    setWhatsErro(whatsOk ? "" : WHATSAPP_INVALIDO);
+    if (!nomeOk || !whatsOk) return;
     setResultado(null);
     setRodando(true);
     setEtapa(0);
     try {
       // O servidor grava o contato antes de consultar o Google; se a
       // gravação falhar, a análise nem roda.
-      const r = await chamar({ data: { mapsUrl, businessName, whatsapp: whats } });
+      const r = await chamar({ data: { mapsUrl, businessName, nomeContato: nome, whatsapp: whats } });
       if (!r.ok && r.erro === CAPTURA_FALHOU) {
         setWhatsErro(CAPTURA_FALHOU);
       } else {
@@ -317,6 +319,19 @@ export function Simulador() {
             hint="Use se o link for de um lugar genérico ou se quiser confirmar pela cidade."
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
+          />
+          <Input
+            label="Seu nome"
+            name="nome"
+            placeholder="Como você prefere ser chamado"
+            autoComplete="given-name"
+            required
+            error={nomeErro || undefined}
+            value={nome}
+            onChange={(e) => {
+              setNome(e.target.value);
+              if (nomeErro) setNomeErro("");
+            }}
           />
           <Input
             label="Seu WhatsApp"
