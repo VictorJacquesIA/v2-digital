@@ -6,15 +6,8 @@ import { routeTree } from "@/routeTree.gen";
 import { WHATSAPP_DISPLAY, WHATSAPP_NUMBER, whatsappLink } from "@/lib/contact";
 import { WHATSAPP_INVALIDO, whatsappValido } from "@/lib/lead";
 import {
-  contatoErros,
-  contatoMensagem,
-  MAPS_VAZIO,
-  NOME_VAZIO,
-  RESPONSAVEL_VAZIO,
-  WHATSAPP_VAZIO,
-} from "@/lib/contact-form";
-import {
   COMPLEMENTOS,
+  CTA_FINAL,
   FAQ,
   H2S,
   METODO,
@@ -58,15 +51,13 @@ describe("Copy da landing", () => {
     }
   });
 
-  it("cita Imbituba em pelo menos um H2", () => {
-    expect(H2S.some((h) => h.includes("Imbituba"))).toBe(true);
+  it("não prende o site a uma cidade", () => {
+    expect(H2S.some((h) => h.includes("Imbituba"))).toBe(false);
   });
 
-  it("promete meta com prazo, nunca posição garantida nem trabalho sem cobrar", () => {
-    expect(OFERTA.confianca).toBe(
-      "Meta de Top 3 no mapa em até 90 dias, com relatório mensal mostrando cada avanço.",
-    );
-    expect(OFERTA.metaDias).toBe(90);
+  it("oferta principal é reestruturação + placa, sem garantir posição nem trabalho sem cobrar", () => {
+    expect(OFERTA.entregas.join(" ")).toMatch(/reestruturado/i);
+    expect(OFERTA.entregas.join(" ")).toMatch(/placa/i);
     expect(OFERTA.confianca).not.toMatch(/sem cobrar|garant/i);
     for (const item of FAQ) {
       expect(item.resposta).not.toMatch(/sem cobrar/i);
@@ -77,16 +68,16 @@ describe("Copy da landing", () => {
   it("mantém os 4 passos do método na ordem do roteiro", () => {
     expect(METODO.passos.map((p) => p.nome)).toEqual([
       "Diagnóstico",
-      "Mapa",
+      "Google",
       "IA",
-      "Prova",
+      "Avaliações",
     ]);
   });
 
   it("tem exatamente 3 complementos, na copy do cliente", () => {
     expect(COMPLEMENTOS.cards.map((c) => c.nome)).toEqual([
-      "Placa QR + NFC de Avaliação",
-      "Tráfego Pago Local",
+      "Acompanhamento Mensal",
+      "Tráfego Pago",
       "Site ou Landing Page de Venda",
     ]);
   });
@@ -119,36 +110,25 @@ describe("Portão de WhatsApp do diagnóstico", () => {
   });
 });
 
-describe("Formulário final", () => {
-  const cheio = {
-    nome: "Padaria Central",
-    responsavel: "Maria Silva",
-    telefone: "(54) 99950-7960",
-    maps: "https://maps.app.goo.gl/abc123",
-  };
-
-  it("exige os quatro campos, com a instrução do cliente", () => {
-    expect(contatoErros({ nome: "  ", responsavel: "", telefone: "", maps: "" })).toEqual({
-      nome: NOME_VAZIO,
-      responsavel: RESPONSAVEL_VAZIO,
-      telefone: WHATSAPP_VAZIO,
-      maps: MAPS_VAZIO,
-    });
-    expect(NOME_VAZIO).toBe("Informe o nome do seu negócio");
-    expect(RESPONSAVEL_VAZIO).toBe("Informe o nome do responsável");
-    expect(contatoErros(cheio)).toEqual({});
-  });
-
-  it("leva os quatro campos na mensagem do WhatsApp", () => {
-    expect(contatoMensagem(cheio)).toBe(
-      "Olá! Vim pelo site da V2 Digital.\nNegócio: Padaria Central\nResponsável: Maria Silva\nWhatsApp: (54) 99950-7960\nGoogle Maps ou cidade: https://maps.app.goo.gl/abc123",
+describe("Proposta montada na página", () => {
+  it("junta a oferta e os complementos numa mensagem só, na ordem da página", async () => {
+    const { alternarItem, mensagemProposta } = await import("@/lib/proposta");
+    let ids: string[] = [];
+    ids = alternarItem(ids, "complemento-02");
+    ids = alternarItem(ids, "oferta");
+    expect(mensagemProposta(ids)).toBe(
+      "Olá! Vim pelo site da V2 Digital.\nQuero uma proposta com:\n• Presença V2 (reestruturação do Google + placa de avaliação)\n• Tráfego Pago",
     );
   });
 
-  it("abre o número do cliente com a mensagem inteira legível", () => {
-    const mensagem = contatoMensagem(cheio);
-    const url = whatsappLink(mensagem);
-    expect(url.startsWith("https://wa.me/5554999507960?text=")).toBe(true);
-    expect(decodeURIComponent(url.split("text=")[1] ?? "")).toBe(mensagem);
+  it("clicar de novo tira o item", async () => {
+    const { alternarItem, itensEscolhidos } = await import("@/lib/proposta");
+    const ids = alternarItem(alternarItem([], "complemento-01"), "complemento-01");
+    expect(itensEscolhidos(ids)).toHaveLength(0);
+  });
+
+  it("o fechamento manda a proposta ou uma mensagem simples", async () => {
+    expect(CTA_FINAL.caminhos.map((c) => c.id)).toEqual(["diagnostico", "proposta"]);
+    expect(CTA_FINAL.semItens).toContain("quero uma proposta");
   });
 });

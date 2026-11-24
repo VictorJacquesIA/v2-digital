@@ -8,10 +8,10 @@ import placa from "@/assets/icons/placa-avaliacoes.svg";
  * ganhar um card sem ícone correspondente, o typecheck avisa.
  */
 export const ICONES_COMPLEMENTO = {
-  "01": placa,
+  "01": google,
   "02": trafego,
   "03": sites,
 } as const;
 
 /** Ícone da oferta principal. */
-export const ICONE_OFERTA = google;
+export const ICONE_OFERTA = placa;

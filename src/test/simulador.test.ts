@@ -104,7 +104,7 @@ describe("Simulador — relatório com dados reais", () => {
   it("lista os 3 primeiros da busca com nome, nota e volume reais", () => {
     const r = buildReport({ alvo: alvoForte, busca, posicao: 2, buscaUsada: "Padaria em Imbituba" });
 
-    expect(r.top3).toEqual([
+    expect(r.top3).toMatchObject([
       { posicao: 1, nome: "Padaria do Zé", nota: 4.6, avaliacoes: 20, voce: false },
       { posicao: 2, nome: "Padaria Central", nota: 4.5, avaliacoes: 40, voce: true },
       { posicao: 3, nome: "Panificadora Sul", nota: 4.4, avaliacoes: 30, voce: false },
@@ -172,7 +172,7 @@ describe("Simulador — presença nas respostas de IA", () => {
     expect(r.camposBasicosFaltando).toEqual([]);
     expect(ia?.status).toBe("melhorar");
     expect(ia?.situacao).toBe(
-      "Dados básicos ok (site, horário, telefone, categoria, fotos). Falta reforçar descrição, serviços e avaliações com palavras-chave para o ChatGPT e o Gemini citarem sua empresa.",
+      "Dados básicos ok (site, horário, telefone, categoria, fotos). Falta reforçar descrição, serviços e avaliações com palavras-chave para o ChatGPT e as outras IAs citarem sua empresa.",
     );
   });
 
@@ -338,4 +338,113 @@ describe("segmento dos concorrentes", () => {
 
 it("na nota do perfil, categoria 'Serviços' conta como não preenchida", () => {
   expect(categoriaDoPerfil({ primaryTypeDisplayName: { text: "Serviços" } })).toBe("");
+});
+
+describe("Posição em várias buscas", () => {
+  const busca: PlaceLike[] = [conc("c1", "Padaria Centro", 20, 4.6), alvoForte, conc("c2", "Panificadora Sul", 30, 4.4)];
+  it("guarda as buscas extras e a data no relatório", () => {
+    const r = buildReport({
+      alvo: alvoForte,
+      busca,
+      posicao: 2,
+      buscaUsada: "Padaria em Imbituba",
+      buscas: [
+        { rotulo: "Busca pela cidade", termo: "Padaria em Imbituba", posicao: 2 },
+        { rotulo: "Quem procura o melhor", termo: "melhor Padaria em Imbituba", posicao: null },
+      ],
+      geradoEm: "2026-11-23T12:00:00.000Z",
+    });
+    expect(r.buscas).toHaveLength(2);
+    expect(r.buscas?.[1]?.posicao).toBeNull();
+    expect(r.geradoEm).toBe("2026-11-23T12:00:00.000Z");
+  });
+
+  it("diagnóstico sem buscas extras continua igual", () => {
+    const r = buildReport({ alvo: alvoForte, busca, posicao: 2, buscaUsada: "Padaria em Imbituba" });
+    expect(r.buscas).toBeUndefined();
+    expect(r.geradoEm).toBeUndefined();
+  });
+});
+
+describe("Pacote 1: alerta, avaliação recente e ações", () => {
+  it("acha a avaliação mais recente e escreve há quanto tempo", async () => {
+    const { maisRecente, diasDesde, haQuanto } = await import("@/lib/simulador-score");
+    const iso = maisRecente([{ publishTime: "2026-05-01T10:00:00Z" }, { publishTime: "2026-08-20T10:00:00Z" }]);
+    expect(iso).toBe("2026-08-20T10:00:00.000Z");
+    const dias = diasDesde(iso, new Date("2026-11-23T10:00:00Z"));
+    expect(haQuanto(dias)).toBe("há 3 meses");
+    expect(haQuanto(diasDesde("2026-11-20T10:00:00Z", new Date("2026-11-23T10:00:00Z")))).toBe("há 3 dias");
+    expect(maisRecente([])).toBeNull();
+  });
+
+  it("monta até 3 ações, da mais urgente, só para falhas reais", async () => {
+    const { acoesDeHoje } = await import("@/lib/simulador-score");
+    const acoes = acoesDeHoje({
+      fechado: "temporario", temHorarios: false, fotos: 2, temSite: false, social: false,
+      temTelefone: true, temCategoria: true, avaliacoes: 3, mediaTop3: 50, ultimaAvaliacao: null,
+    });
+    expect(acoes).toHaveLength(3);
+    expect(acoes[0]!.titulo).toMatch(/aberta/);
+    expect(acoes[1]!.titulo).toMatch(/horário/);
+    expect(acoes[2]!.titulo).toMatch(/avaliação/);
+  });
+
+  it("perfil completo e em dia não recebe ação inventada", async () => {
+    const { acoesDeHoje } = await import("@/lib/simulador-score");
+    const acoes = acoesDeHoje({
+      temHorarios: true, fotos: 10, temSite: true, social: false, temTelefone: true, temCategoria: true,
+      avaliacoes: 80, mediaTop3: 50, ultimaAvaliacao: "2026-11-20T10:00:00Z", agora: new Date("2026-11-23T10:00:00Z"),
+    });
+    expect(acoes).toHaveLength(0);
+  });
+
+  it("marca perfil fechado e guarda fotos e site dos concorrentes", () => {
+    const fechado: PlaceLike = { ...alvoForte, userRatingCount: 1, businessStatus: "CLOSED_TEMPORARILY", reviews: [{ publishTime: "2026-01-01T00:00:00Z" }] };
+    const r = buildReport({ alvo: fechado, busca: [fechado, conc("c2", "Outra", 30, 4.4)], posicao: 1, buscaUsada: "Padaria em Imbituba" });
+    expect(r.fechado).toBe("temporario");
+    expect(r.ultimaAvaliacao).toBe("2026-01-01T00:00:00.000Z");
+    expect(r.acoes?.[0]?.titulo).toMatch(/aberta/);
+    expect(r.top3[0]).toHaveProperty("fotos");
+  });
+});
+
+describe("Pacote 2: teste na IA", () => {
+  it("reconhece a empresa na resposta, com ou sem acento e sufixo", async () => {
+    const { citaEmpresa } = await import("@/lib/diagnostico-extra");
+    const resposta = "1. **Pet Shop Amigão** — ótimo banho e tosa\n2. Chef Pet Gourmet, bolos para cães\n3. Clínica Veterinária São José";
+    expect(citaEmpresa(resposta, "Chef Pet Gourmet")).toBe(true);
+    expect(citaEmpresa(resposta, "Pet Shop Amigao - São José")).toBe(true);
+    expect(citaEmpresa(resposta, "Padaria Central")).toBe(false);
+  });
+
+  it("nome curto de uma palavra não dá falso positivo", async () => {
+    const { citaEmpresa } = await import("@/lib/diagnostico-extra");
+    expect(citaEmpresa("O melhor pet shop da cidade", "Pet")).toBe(false);
+  });
+
+  it("marca quais concorrentes a IA citou", async () => {
+    const { montarIa } = await import("@/lib/diagnostico-extra");
+    const ia = montarIa(
+      { pergunta: "Qual a melhor padaria em X?", buscaWeb: false, texto: "Padaria do Zé e Panificadora Sul são boas opções." },
+      "Padaria Central",
+      ["Padaria do Zé", "Panificadora Sul", "Pão Quente"],
+    );
+    expect(ia.citado).toBe(false);
+    expect(ia.concorrentesCitados).toEqual(["Padaria do Zé", "Panificadora Sul"]);
+  });
+});
+
+describe("Cuidados do relatório", () => {
+  it("não afirma a avaliação mais recente quando o Google não mostrou todas", () => {
+    const alvo: PlaceLike = { ...alvoForte, userRatingCount: 40, reviews: [{ publishTime: "2024-01-01T00:00:00Z" }] };
+    const r = buildReport({ alvo, busca: [alvo, conc("c2", "Outra", 30, 4.4)], posicao: 1, buscaUsada: "Padaria em Imbituba" });
+    expect(r.ultimaAvaliacao).toBeUndefined();
+    expect(JSON.stringify(r.acoes)).not.toMatch(/mais de 3 meses/);
+  });
+
+  it("lê o estado do endereço", async () => {
+    const { extrairUf } = await import("@/lib/simulador-score");
+    expect(extrairUf("Rua Luiz Fagundes, 798 - Praia Comprida, São José - SC, 88103-500, Brasil")).toBe("SC");
+    expect(extrairUf("Sem endereço")).toBeNull();
+  });
 });

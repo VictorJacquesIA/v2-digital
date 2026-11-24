@@ -19,7 +19,7 @@ export default defineConfig(({ command, mode }) => {
       server: { entry: "server" },
     }),
   ];
-  if (command === "build") plugins.push(nitro());
+  if (command === "build") plugins.push(nitro({ vercel: { functions: { maxDuration: 60 } } }));
   plugins.push(viteReact());
 
   // Variáveis VITE_* do .env disponíveis no navegador e no servidor.

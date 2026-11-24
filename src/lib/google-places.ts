@@ -17,8 +17,12 @@ export const CAMPOS = [
   "types",
   "photos",
   "regularOpeningHours",
+  "location",
+  "businessStatus",
 ].join(",");
 export const MASK_LISTA = CAMPOS.split(",").map((c) => `places.${c}`).join(",");
+/** Só no perfil do cliente: as avaliações custam mais e não entram nas buscas da cidade. */
+export const CAMPOS_DETALHE = `${CAMPOS},reviews`;
 
 /* ------------------------------------------------------------------ */
 /* Chamadas ao Google                                                  */

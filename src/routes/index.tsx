@@ -1,9 +1,9 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell, SectionTitle } from "@/components/v2/shell";
 import { Simulador } from "@/components/v2/simulador";
 import { LogoStrip } from "@/components/v2/logo-strip";
-import { Button, Card, Input } from "@/components/v2/ui";
+import { Button, Card } from "@/components/v2/ui";
 import { ICONES_COMPLEMENTO, ICONE_OFERTA } from "@/lib/icons";
 import { whatsappLink } from "@/lib/contact";
 import {
@@ -18,12 +18,12 @@ import {
   PROBLEMA,
   PROVA,
 } from "@/lib/content";
-import { contatoErros, contatoMensagem, type Erros } from "@/lib/contact-form";
+import { alternarItem, itensEscolhidos, mensagemProposta } from "@/lib/proposta";
 
 const SITE_URL = "/";
-const SITE_TITLE = "Google Meu Negócio e Visibilidade em IA em Imbituba | V2 Digital";
+const SITE_TITLE = "Google Meu Negócio e Visibilidade em IA | V2 Digital";
 const SITE_DESC =
-  "Coloque sua empresa no Top 3 do Google Maps e nas respostas do ChatGPT e do Gemini. Diagnóstico grátis para negócios de Imbituba e região.";
+  "Coloque sua empresa no Top 3 do Google Maps e nas respostas do ChatGPT e das outras IAs. Diagnóstico grátis para a sua empresa.";
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -37,7 +37,7 @@ const localBusiness = {
     addressRegion: "SC",
     addressCountry: "BR",
   },
-  areaServed: ["Imbituba", "Região de Imbituba"],
+  areaServed: { "@type": "Country", name: "Brasil" },
   url: SITE_URL,
   knowsAbout: [
     "Google Meu Negócio",
@@ -78,30 +78,47 @@ export const Route = createFileRoute("/")({
 });
 
 function Site() {
-  const [nome, setNome] = useState("");
-  const [responsavel, setResponsavel] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [maps, setMaps] = useState("");
-  const [erros, setErros] = useState<Erros>({});
+  // Itens que o visitante juntou na proposta (oferta principal e complementos).
+  const [proposta, setProposta] = useState<string[]>([]);
+  const escolhidos = itensEscolhidos(proposta);
+  const alternar = (id: string) => setProposta((atual) => alternarItem(atual, id));
 
-  function send(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const contato = { nome, responsavel, telefone, maps };
-    const novos = contatoErros(contato);
-    setErros(novos);
-    if (novos.nome || novos.responsavel || novos.telefone || novos.maps) return;
-    window.location.assign(whatsappLink(contatoMensagem(contato)));
-  }
+  // A barra da proposta some na seção final, que já mostra o mesmo botão.
+  const contatoRef = useRef<HTMLElement>(null);
+  const [naContato, setNaContato] = useState(false);
+  useEffect(() => {
+    const alvo = contatoRef.current;
+    if (!alvo || typeof IntersectionObserver === "undefined") return;
+    const obs = new IntersectionObserver(([e]) => setNaContato(!!e?.isIntersecting), { threshold: 0.2 });
+    obs.observe(alvo);
+    return () => obs.disconnect();
+  }, []);
+
+  // Links internos (#...) rolam uma vez só, direto ao alvo: sem isso a rolagem do
+  // navegador e a do roteador se somavam e passavam do ponto no celular.
+  useEffect(() => {
+    function aoClicar(e: MouseEvent) {
+      const a = (e.target as HTMLElement | null)?.closest?.('a[href^="#"]') as HTMLAnchorElement | null;
+      const id = a?.getAttribute("href")?.slice(1);
+      const alvo = id ? document.getElementById(id) : null;
+      if (!alvo) return;
+      e.preventDefault();
+      alvo.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", `#${id}`);
+    }
+    document.addEventListener("click", aoClicar);
+    return () => document.removeEventListener("click", aoClicar);
+  }, []);
 
   return (
-    <Shell>
+    <Shell esconderWhats={escolhidos.length > 0}>
       <section className="site-hero">
         <div className="site-wrap">
           <span className="v2-overline site-overline">{HERO.eyebrow}</span>
           <h1 className="site-display">{HERO.titulo}</h1>
           <p className="site-lead">{HERO.subtitulo}</p>
           <div className="site-actions">
-            <Button variant="primary" href="#auditoria">
+            <Button variant="primary" href="#diagnostico-form">
               {HERO.acaoPrincipal}
             </Button>
             <Button
@@ -170,12 +187,12 @@ function Site() {
             </ul>
             <p className="site-meta">{OFERTA.confianca}</p>
             <Button
-              variant="primary"
-              href={whatsappLink(
-                `Olá! Vim pelo site da V2 Digital.\nQuero minha proposta para o ${OFERTA.nome}.`,
-              )}
+              variant={proposta.includes("oferta") ? "secondary" : "primary"}
+              type="button"
+              aria-pressed={proposta.includes("oferta")}
+              onClick={() => alternar("oferta")}
             >
-              {OFERTA.botao}
+              {proposta.includes("oferta") ? "✓ Na sua proposta · remover" : OFERTA.botao}
             </Button>
           </article>
         </div>
@@ -193,12 +210,12 @@ function Site() {
                 title={c.nome}
                 action={
                   <Button
-                    variant="secondary"
-                    href={whatsappLink(
-                      `Olá! Vim pelo site da V2 Digital.\nQuero incluir: ${c.nome}.`,
-                    )}
+                    variant={proposta.includes(`complemento-${c.n}`) ? "primary" : "secondary"}
+                    type="button"
+                    aria-pressed={proposta.includes(`complemento-${c.n}`)}
+                    onClick={() => alternar(`complemento-${c.n}`)}
                   >
-                    {COMPLEMENTOS.botao}
+                    {proposta.includes(`complemento-${c.n}`) ? "✓ Incluído · remover" : COMPLEMENTOS.botao}
                   </Button>
                 }
               >
@@ -230,75 +247,52 @@ function Site() {
         </div>
       </section>
 
-      <section className="site-section" id="contato">
+      <section className="site-section" id="contato" ref={contatoRef}>
         <div className="site-wrap">
-          <div className="site-contact">
-            <div>
-              <span className="v2-overline site-overline">Próximo passo</span>
-              <h2 className="ds-h2">{CTA_FINAL.titulo}</h2>
-              <p className="ds-lead">{CTA_FINAL.apoio}</p>
-            </div>
-            <form className="site-form-box" onSubmit={send}>
-              <Input
-                label="Nome do negócio"
-                name="nome"
-                placeholder="Padaria Central"
-                hint="Como sua empresa é conhecida na cidade."
-                error={erros.nome}
-                value={nome}
-                onChange={(e) => {
-                  setNome(e.target.value);
-                  if (erros.nome) setErros((p) => ({ ...p, nome: undefined }));
-                }}
-              />
-              <Input
-                label="Nome do responsável"
-                name="responsavel"
-                placeholder="Maria Silva"
-                hint="Com quem a gente fala no WhatsApp."
-                autoComplete="name"
-                error={erros.responsavel}
-                value={responsavel}
-                onChange={(e) => {
-                  setResponsavel(e.target.value);
-                  if (erros.responsavel) setErros((p) => ({ ...p, responsavel: undefined }));
-                }}
-              />
-              <Input
-                label="WhatsApp"
-                name="telefone"
-                placeholder="(00) 00000-0000"
-                inputMode="tel"
-                autoComplete="tel"
-                error={erros.telefone}
-                value={telefone}
-                onChange={(e) => {
-                  setTelefone(e.target.value);
-                  if (erros.telefone) setErros((p) => ({ ...p, telefone: undefined }));
-                }}
-              />
-              <Input
-                label="Link do Google Maps ou cidade"
-                name="maps"
-                placeholder="https://maps.app.goo.gl/... ou Imbituba"
-                hint="No Google Maps, toque em Compartilhar e copie o link da sua empresa."
-                inputMode="url"
-                autoComplete="url"
-                error={erros.maps}
-                value={maps}
-                onChange={(e) => {
-                  setMaps(e.target.value);
-                  if (erros.maps) setErros((p) => ({ ...p, maps: undefined }));
-                }}
-              />
-              <Button variant="primary" type="submit" className="site-form-submit">
-                {CTA_FINAL.botao}
-              </Button>
-              <p className="site-form-nota">{CTA_FINAL.abaixo}</p>
-            </form>
+          <SectionTitle n="Próximo passo" title={CTA_FINAL.titulo} />
+          <div className="site-caminhos">
+            {CTA_FINAL.caminhos.map((c) => (
+              <article className="site-caminho" key={c.id}>
+                <h3 className="site-caminho-rotulo">{c.rotulo}</h3>
+                <p className="site-caminho-texto">{c.texto}</p>
+                {c.id === "proposta" && escolhidos.length > 0 ? (
+                  <p className="site-caminho-itens">
+                    <span className="v2-overline">Sua proposta</span>
+                    {escolhidos.map((i) => i.nome).join(" + ")}
+                  </p>
+                ) : null}
+                {c.id === "diagnostico" ? (
+                  <Button variant="secondary" href="#diagnostico-form">{c.botao}</Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    href={whatsappLink(escolhidos.length > 0 ? mensagemProposta(proposta) : CTA_FINAL.semItens)}
+                  >
+                    {c.botao}
+                  </Button>
+                )}
+              </article>
+            ))}
           </div>
+          <p className="site-form-nota">{CTA_FINAL.abaixo}</p>
         </div>
       </section>
+
+      {escolhidos.length > 0 && !naContato ? (
+        <aside className="site-proposta" aria-label="Sua proposta" aria-live="polite">
+          <div className="site-proposta-itens">
+            <span className="v2-overline">
+              Sua proposta · {escolhidos.length} {escolhidos.length === 1 ? "item" : "itens"}
+            </span>
+            <p>{escolhidos.map((i) => i.nome).join(" + ")}</p>
+          </div>
+          <div className="site-proposta-acoes">
+            <Button variant="primary" href={whatsappLink(mensagemProposta(proposta))}>
+              Enviar no WhatsApp
+            </Button>
+          </div>
+        </aside>
+      ) : null}
     </Shell>
   );
 }

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedLeadsRouteImport } from './routes/_authenticated/leads'
+import { Route as DiagnosticoTokenRouteImport } from './routes/diagnostico/$token'
 import { Route as EstrategiaTokenRouteImport } from './routes/estrategia/$token'
 import { Route as AuthenticatedCrmIndexRouteImport } from './routes/_authenticated/crm/index'
 import { Route as AuthenticatedCrmAgendaRouteImport } from './routes/_authenticated/crm/agenda'
@@ -37,6 +38,11 @@ const AuthenticatedLeadsRoute = AuthenticatedLeadsRouteImport.update({
   id: '/leads',
   path: '/leads',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const DiagnosticoTokenRoute = DiagnosticoTokenRouteImport.update({
+  id: '/diagnostico/$token',
+  path: '/diagnostico/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const EstrategiaTokenRoute = EstrategiaTokenRouteImport.update({
   id: '/estrategia/$token',
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/leads': typeof AuthenticatedLeadsRoute
+  '/diagnostico/$token': typeof DiagnosticoTokenRoute
   '/estrategia/$token': typeof EstrategiaTokenRoute
   '/crm/agenda': typeof AuthenticatedCrmAgendaRoute
   '/crm/funil': typeof AuthenticatedCrmFunilRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/leads': typeof AuthenticatedLeadsRoute
+  '/diagnostico/$token': typeof DiagnosticoTokenRoute
   '/estrategia/$token': typeof EstrategiaTokenRoute
   '/crm/agenda': typeof AuthenticatedCrmAgendaRoute
   '/crm/funil': typeof AuthenticatedCrmFunilRoute
@@ -91,6 +99,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/leads': typeof AuthenticatedLeadsRoute
+  '/diagnostico/$token': typeof DiagnosticoTokenRoute
   '/estrategia/$token': typeof EstrategiaTokenRoute
   '/_authenticated/crm/agenda': typeof AuthenticatedCrmAgendaRoute
   '/_authenticated/crm/funil': typeof AuthenticatedCrmFunilRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/leads'
+    | '/diagnostico/$token'
     | '/estrategia/$token'
     | '/crm/agenda'
     | '/crm/funil'
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/leads'
+    | '/diagnostico/$token'
     | '/estrategia/$token'
     | '/crm/agenda'
     | '/crm/funil'
@@ -124,6 +135,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/leads'
+    | '/diagnostico/$token'
     | '/estrategia/$token'
     | '/_authenticated/crm/agenda'
     | '/_authenticated/crm/funil'
@@ -135,6 +147,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  DiagnosticoTokenRoute: typeof DiagnosticoTokenRoute
   EstrategiaTokenRoute: typeof EstrategiaTokenRoute
 }
 
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/leads'
       preLoaderRoute: typeof AuthenticatedLeadsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/diagnostico/$token': {
+      id: '/diagnostico/$token'
+      path: '/diagnostico/$token'
+      fullPath: '/diagnostico/$token'
+      preLoaderRoute: typeof DiagnosticoTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/estrategia/$token': {
       id: '/estrategia/$token'
@@ -229,6 +249,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  DiagnosticoTokenRoute: DiagnosticoTokenRoute,
   EstrategiaTokenRoute: EstrategiaTokenRoute,
 }
 export const routeTree = rootRouteImport

@@ -385,16 +385,11 @@ html { scroll-behavior: smooth; }
 .site-faq-item[open] summary::after { content: "\2013"; }
 .site-faq-item p { margin: 0; padding: 0 0 var(--space-6); max-width: 70ch; font-size: 15px; line-height: 24px; color: var(--ink-muted); }
 /* Contato: texto à esquerda, formulário em caixa própria à direita */
-.site-contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-12); align-items: start; }
-.site-form-box { display: grid; grid-template-columns: 1fr; gap: var(--space-4); padding: var(--space-8); background: var(--surface-100); border: 1px solid var(--border); border-radius: var(--radius-md); }
-.site-form-box .v2-field { width: 100%; }
-.site-form-submit { width: 100%; }
 .site-form-nota { margin: 0; font-size: 13px; line-height: 20px; color: var(--ink-muted); }
 /* Botão fixo de WhatsApp no celular (nada de vermelho: é o contorno do brand) */
 .site-float-wa { display: none; }
 @media (max-width: 860px) {
   .site-display { font-size: clamp(32px, 5.4vw, 44px); }
-  .site-contact { grid-template-columns: minmax(0, 1fr); }
   .site-oferta { padding: var(--space-6); }
   .site-passos { grid-template-columns: 1fr; }
   .site-passo { padding: var(--space-6) 0; border-left: 0; border-top: 1px solid var(--border); }
@@ -408,6 +403,20 @@ html { scroll-behavior: smooth; }
 .sim-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-4); padding: var(--space-6); background: var(--surface-200); border: 1px solid var(--border); border-radius: var(--radius-md); }
 .sim-form .v2-field { width: 100%; }
 .sim-form > .v2-btn { grid-column: 1 / -1; justify-self: start; }
+/* Busca da empresa pelo nome, com sugestões do Google */
+.sim-form > .sim-busca { grid-column: 1 / -1; display: flex; flex-direction: column; gap: var(--space-2); }
+.sim-busca .v2-field { position: relative; }
+.sim-sugestoes { position: absolute; top: 72px; left: 0; right: 0; z-index: 20; margin: 0; padding: var(--space-1) 0; list-style: none; background: var(--surface-100); border: 1px solid var(--ink); border-radius: var(--radius-sm); max-height: 320px; overflow-y: auto; }
+.sim-sugestao { display: flex; flex-direction: column; gap: 2px; padding: 10px var(--space-4); cursor: pointer; border-bottom: 1px solid var(--border); }
+.sim-sugestao:last-child { border-bottom: 0; }
+.sim-sugestao strong, .sim-escolhida strong { font: 600 15px/20px var(--font-sans); color: var(--ink); }
+.sim-sugestao span, .sim-escolhida span { font: 400 13px/18px var(--font-sans); color: var(--ink-muted); }
+.sim-sugestao:hover, .sim-sugestao-ativa { background: var(--surface-200); }
+.sim-escolhida { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 48px; padding: 10px var(--space-4); border: 1px solid var(--ink); border-radius: var(--radius-sm); background: var(--surface-100); }
+.sim-escolhida > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sim-link-btn { align-self: flex-start; min-height: 44px; padding: 0; border: 0; background: none; font: 600 13px/16px var(--font-sans); color: var(--brand-red-text); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.sim-link-btn:hover { color: var(--ink); }
+.sim-link-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .sim-loading { margin-top: var(--space-6); }
 .sim-bar { height: 2px; background: var(--border); }
 .sim-bar span { display: block; height: 2px; background: var(--ink); transition: width .5s linear; }
@@ -513,8 +522,7 @@ html { scroll-behavior: smooth; }
   /* 5. Formulário e botões para toque */
   .v2-input { font-size: 16px; }
   .v2-check-label { min-height: 44px; align-items: center; }
-  .site-form-box { padding: 24px 20px; }
-  .site-actions .v2-btn, .site-form-box .v2-btn { width: 100%; height: 48px; }
+  .site-actions .v2-btn, .site-caminho .v2-btn { width: 100%; height: 48px; }
   .site-main-card .v2-btn { width: 100%; min-height: 48px; height: auto; padding: 12px var(--space-4); white-space: normal; text-align: center; }
   .v2-card-action .v2-btn { width: 100%; justify-content: flex-start; min-height: 44px; }
 
@@ -767,3 +775,99 @@ details[open].crm-bloco > summary { margin-bottom: 12px; }
 }
 /* Logo do topo do site com área de toque de 44px (a imagem continua com 32px) */
 .v2-header-logo { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+
+/* Barra da proposta: o visitante junta a oferta e os complementos e manda tudo numa mensagem só */
+.site-proposta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); padding: var(--space-4) var(--space-8); background: var(--ink); color: var(--surface-100); border-top: 1px solid var(--ink); box-sizing: border-box; }
+.site-proposta-itens { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.site-proposta-itens .v2-overline { color: var(--surface-200); }
+.site-proposta-itens p { margin: 0; font: 600 16px/22px var(--font-sans); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.site-proposta-acoes { display: flex; align-items: center; gap: var(--space-6); flex-shrink: 0; }
+.site-proposta-espaco { height: 96px; }
+@media (max-width: 768px) {
+  .site-proposta { flex-direction: column; align-items: stretch; gap: var(--space-2); padding: var(--space-4) 20px; }
+  .site-proposta-acoes { justify-content: space-between; gap: var(--space-4); }
+  .site-proposta-acoes .v2-btn { flex: 1; }
+  .site-proposta-espaco { height: 128px; }
+}
+
+/* Próximo passo: dois caminhos lado a lado, diagnóstico ou proposta */
+.site-caminhos { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-6); margin-top: var(--space-8); }
+.site-caminho { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); padding: var(--space-8); background: var(--surface-100); border: 1px solid var(--border); border-radius: var(--radius-md); }
+.site-caminho .v2-btn { margin-top: auto; }
+.site-caminho-rotulo { margin: 0; font: 600 22px/28px var(--font-display); letter-spacing: -.015em; color: var(--ink); }
+.site-caminho-texto { margin: 0; font-size: 16px; line-height: 26px; color: var(--ink-muted); }
+.site-caminho-itens { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; padding: var(--space-4); width: 100%; box-sizing: border-box; background: var(--surface-200); border-radius: var(--radius-sm); font: 600 15px/22px var(--font-sans); color: var(--ink); }
+.site-caminho-itens .v2-overline { color: var(--brand-red-text); }
+#contato .site-form-nota { margin-top: var(--space-6); }
+@media (max-width: 768px) {
+  .site-caminhos { grid-template-columns: minmax(0, 1fr); }
+  .site-caminho { padding: 24px 20px; }
+}
+
+/* Guardar o diagnóstico: link público e PDF */
+.sim-guardar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; margin: var(--space-6) 0; padding: var(--space-4) var(--space-6); background: var(--surface-100); border: 1px solid var(--ink); border-radius: var(--radius-md); }
+.sim-guardar-titulo { margin: 0; font: 600 16px/22px var(--font-sans); color: var(--ink); }
+.sim-guardar-texto { margin: var(--space-1) 0 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+.sim-guardar-acoes { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+
+/* Página pública do diagnóstico */
+.diag-publico { max-width: 960px; }
+.diag-publico-topo { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
+.diag-publico-rodape { margin: var(--space-8) 0 0; font-size: 13px; line-height: 20px; color: var(--ink-muted); }
+
+/* Impressão / Salvar em PDF: só o relatório, sem botões nem barras */
+@media print {
+  .v2-header, .v2-footer, .site-float-wa, .site-proposta, .site-proposta-espaco, .sim-nao-imprimir, .sim-cta, .sim-prefiro { display: none !important; }
+  body { background: #fff; }
+  .diag-publico { max-width: none; padding: 0; }
+  .sim-bloco, .sim-metric, tr { break-inside: avoid; }
+}
+
+/* Diagnóstico: alerta de perfil fechado e bloco "Faça hoje" */
+.sim-alerta { margin: var(--space-6) 0; padding: var(--space-4) var(--space-6); background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger); border-radius: var(--radius-md); }
+.sim-alerta strong { display: block; font: 700 16px/22px var(--font-sans); }
+.sim-alerta p { margin: var(--space-1) 0 0; font-size: 14px; line-height: 20px; color: var(--ink); }
+.sim-hoje { padding: var(--space-6); background: var(--surface-100); border: 1px solid var(--ink); border-radius: var(--radius-md); }
+
+/* Diagnóstico: teste real na IA */
+.sim-ia { display: flex; flex-direction: column; gap: var(--space-4); }
+.sim-ia-pergunta { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; font: 600 16px/24px var(--font-sans); color: var(--ink); }
+.sim-ia-pergunta .v2-overline { color: var(--brand-red-text); }
+.sim-ia-veredito { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); }
+.sim-ia-trecho { margin: 0; padding: var(--space-4) var(--space-6); background: var(--surface-200); border-radius: var(--radius-sm); font-size: 14px; line-height: 22px; color: var(--ink); white-space: pre-line; }
+
+/* Tabelas do resultado no celular: cada valor com o nome do campo ao lado */
+@media (max-width: 768px) {
+  .sim-table td.sim-nome { font: 600 15px/20px var(--font-sans); color: var(--ink); }
+  .sim-table td.sim-pos { order: -1; }
+  .sim-table td.sim-sub { font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+  .sim-table td[data-rotulo] { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); text-align: right; }
+  .sim-table td[data-rotulo]::before { content: attr(data-rotulo); font: 600 12px/16px var(--font-sans); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-muted); text-align: left; flex-shrink: 0; }
+}
+
+/* Âncora do formulário do diagnóstico: o botão do topo leva direto aos campos */
+#diagnostico-form { scroll-margin-top: var(--space-6); }
+@media (max-width: 768px) {
+  .v2-header-cta { min-height: 44px; }
+}
+
+/* Resultado compacto no celular */
+.sim-prefiro { display: inline-flex; align-items: center; min-height: 44px; }
+.sim-bloco .site-table-wrap + .sim-metric-note { margin-top: var(--space-4); }
+@media (max-width: 768px) {
+  .sim-bloco .sim-table { margin-top: var(--space-4); }
+  .sim-comp tbody tr { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--space-2); row-gap: var(--space-2); padding: var(--space-4) var(--space-2); }
+  .sim-comp tbody tr:first-child { padding-top: var(--space-4); }
+  .sim-comp tbody tr:last-child { padding-bottom: var(--space-4); }
+  .sim-comp tbody tr.sim-eu, .sim-comp tbody tr.sim-eu td { background: var(--surface-200); }
+  .sim-comp tbody td, .sim-comp tbody td + td { margin: 0; }
+  .sim-comp tbody td.sim-pos { grid-column: 1 / -1; order: 0; justify-content: flex-start; font-weight: 700; }
+  .sim-comp tbody td.sim-nome { grid-column: 1 / -1; }
+  .sim-comp tbody td[data-rotulo]:not(.sim-pos) { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 2px; text-align: left; }
+  .sim-comp tbody td[data-rotulo]:not(.sim-pos)::before { font-size: 10px; line-height: 14px; letter-spacing: 0; text-transform: none; }
+  .sim-comp tbody td.sim-pos::before { display: none; }
+  .sim-linha tbody tr { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-2) 0; }
+  .sim-linha tbody td { width: auto; }
+  .sim-linha tbody td + td { margin: 0; }
+  .sim-linha tbody td[data-rotulo]::before { display: none; }
+}

@@ -254,6 +254,7 @@ export type Database = {
           business_name: string | null
           created_at: string
           dados: Json | null
+          diagnostico_token: string | null
           estrategia: Json | null
           estrategia_expira: string | null
           estrategia_token: string | null
@@ -275,6 +276,7 @@ export type Database = {
           business_name?: string | null
           created_at?: string
           dados?: Json | null
+          diagnostico_token?: string | null
           estrategia?: Json | null
           estrategia_expira?: string | null
           estrategia_token?: string | null
@@ -296,6 +298,7 @@ export type Database = {
           business_name?: string | null
           created_at?: string
           dados?: Json | null
+          diagnostico_token?: string | null
           estrategia?: Json | null
           estrategia_expira?: string | null
           estrategia_token?: string | null
@@ -337,6 +340,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      diagnostico_publico: {
+        Args: { _token: string }
+        Returns: {
+          atualizado: string
+          business_name: string
+          dados: Json
+        }[]
+      }
       estrategia_publica: {
         Args: { _token: string }
         Returns: {

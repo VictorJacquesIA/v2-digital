@@ -24,9 +24,68 @@ export type SimConcorrente = {
   avaliacoes: number;
   /** true quando a linha é o próprio perfil do cliente. */
   voce: boolean;
+  /** Fotos públicas (o Google mostra até 10). Ausente em diagnósticos antigos. */
+  fotos?: number;
+  temSite?: boolean;
+  temHorarios?: boolean;
+};
+
+/** Teste real na IA: a pergunta de um cliente e se a empresa apareceu na resposta. */
+export type SimIa = {
+  pergunta: string;
+  ia: string;
+  /** true quando a IA consultou a web para responder. */
+  buscaWeb: boolean;
+  citado: boolean;
+  /** Quais dos 3 primeiros do Google a IA citou. */
+  concorrentesCitados: string[];
+  /** Começo da resposta, sem formatação. */
+  trecho: string;
+};
+
+/** Checagem do site cadastrado no perfil. null = não deu para conferir. */
+export type SimSite = {
+  url: string;
+  abriu: boolean;
+  https: boolean;
+  /** Tem a configuração de tela de celular (meta viewport). */
+  celular: boolean | null;
+  /** O telefone do perfil do Google aparece no site. */
+  telefone: boolean | null;
+  /** Tem dados estruturados (JSON-LD), que Google e IAs leem. */
+  dadosEstruturados: boolean | null;
+  /** Nota de velocidade no celular, 0 a 100 (PageSpeed). */
+  velocidade: number | null;
+};
+
+/** Uma ação prática e gratuita que o dono pode fazer hoje. */
+export type SimAcao = { titulo: string; texto: string };
+
+/** Posição do cliente numa das buscas feitas para o diagnóstico. */
+export type SimBusca = {
+  /** Como a busca aparece no relatório ("Busca pela cidade"...). */
+  rotulo: string;
+  /** O texto pesquisado no Google. */
+  termo: string;
+  /** null = não apareceu entre os 10 primeiros do mesmo segmento. */
+  posicao: number | null;
 };
 
 export type SimReport = {
+  /** Buscas extras (cidade, "melhor", perto da empresa). Ausente em diagnósticos antigos. */
+  buscas?: SimBusca[];
+  /** Quando o diagnóstico foi gerado (ISO). Ausente em diagnósticos antigos. */
+  geradoEm?: string;
+  /** O Google marca a empresa como fechada. */
+  fechado?: "temporario" | "definitivo";
+  /** Data (ISO) da avaliação mais recente entre as que o Google mostra. */
+  ultimaAvaliacao?: string | null;
+  /** Até 3 ações práticas para fazer hoje, da mais urgente para a menos. */
+  acoes?: SimAcao[];
+  /** Teste real na IA (Pacote 2). */
+  ia?: SimIa;
+  /** Checagem do site (Pacote 2). */
+  siteCheck?: SimSite;
   nome: string;
   endereco: string;
   cidade: string | null;
@@ -68,6 +127,11 @@ export type PlaceLike = {
   photos?: unknown[];
   regularOpeningHours?: { periods?: unknown[] };
   attribution?: string;
+  location?: { latitude?: number; longitude?: number };
+  /** OPERATIONAL, CLOSED_TEMPORARILY ou CLOSED_PERMANENTLY. */
+  businessStatus?: string;
+  /** Até 5 avaliações que o Google mostra (só no perfil do cliente). */
+  reviews?: { publishTime?: string; rating?: number }[];
 };
 
 /** Pontos de cada critério. A soma fecha em 100. */
@@ -104,6 +168,10 @@ export function extrairCidade(address?: string): string | null {
   return cidadeEstado && cidadeEstado[1] ? cidadeEstado[1].trim() : null;
 }
 
+export function extrairUf(address?: string): string | null {
+  return /(?:-|,)\s*([A-Z]{2}),\s*\d{5}/.exec(address ?? "")?.[1] ?? null;
+}
+
 export function ehRedeSocial(uri?: string): boolean {
   if (!uri) return false;
   let host = "";
@@ -113,6 +181,11 @@ export function ehRedeSocial(uri?: string): boolean {
     return false;
   }
   return REDES_SOCIAIS.some((h) => host === h || host.endsWith(`.${h}`));
+}
+
+/** "1 avaliação", "12 avaliações". */
+export function qtdAvaliacoes(n: number): string {
+  return `${n} ${n === 1 ? "avaliação" : "avaliações"}`;
 }
 
 function rotuloPosicao(posicao: number | null): string {
@@ -227,6 +300,9 @@ function concorrentesDaBusca(alvo: PlaceLike, busca: PlaceLike[]): SimConcorrent
       nota: typeof p.rating === "number" ? p.rating : null,
       avaliacoes: p.userRatingCount ?? 0,
       voce: p.id !== undefined && p.id === alvo.id,
+      fotos: p.photos?.length ?? 0,
+      temSite: Boolean(p.websiteUri?.trim()) && !ehRedeSocial(p.websiteUri),
+      temHorarios: (p.regularOpeningHours?.periods?.length ?? 0) > 0,
     });
   }
   return out;
@@ -251,7 +327,7 @@ export function vereditoDo(args: {
 
   // 1. Nota boa, volume baixo: o problema é aparecer, não a qualidade.
   if (nota !== null && nota >= 4.7 && !semComparavel && mediaTop3 > 0 && avaliacoes < mediaTop3) {
-    return `${nome} tem boa reputação, mas está invisível. A nota é ${notaTexto}★, só que são ${avaliacoes} avaliações contra ${mediaTop3} dos 3 primeiros. Hoje é o volume, não a qualidade, que está empurrando clientes para o concorrente.`;
+    return `${nome} tem boa reputação, mas está invisível. A nota é ${notaTexto}★, só que ${avaliacoes === 1 ? "é" : "são"} ${qtdAvaliacoes(avaliacoes)} contra ${mediaTop3} dos 3 primeiros. Hoje é o volume, não a qualidade, que está empurrando clientes para o concorrente.`;
   }
 
   // 2. Nota abaixo da meta de conversão local.
@@ -267,8 +343,8 @@ export function vereditoDo(args: {
   // 4. Nota boa e volume acima da média, mas fora do Top 3.
   if (nota !== null && nota >= 4.7) {
     const volume = semComparavel
-      ? `${avaliacoes} avaliações e nenhuma base de comparação na cidade`
-      : `${avaliacoes} avaliações, acima da média de ${mediaTop3} dos 3 primeiros`;
+      ? `${qtdAvaliacoes(avaliacoes)} e nenhuma base de comparação na cidade`
+      : `${qtdAvaliacoes(avaliacoes)}, acima da média de ${mediaTop3} dos 3 primeiros`;
     return `${nome} tem ${notaTexto}★ com ${volume}, mas aparece em ${rotuloPosicao(posicao)} na busca por "${posicaoBusca(args)}". O que falta é visibilidade, não reputação.`;
   }
 
@@ -286,8 +362,8 @@ export function explicacaoCurta(c: SimCriterion, r: SimReport): string {
   switch (c.criterio) {
     case "Quantidade de avaliações":
       return r.buscaUsada
-        ? `${r.avaliacoes} avaliações contra a média de ${r.mediaTop3} dos 3 primeiros da cidade.`
-        : `${r.avaliacoes} avaliações publicadas e nenhum concorrente comparável na cidade.`;
+        ? `${qtdAvaliacoes(r.avaliacoes)} contra a média de ${r.mediaTop3} dos 3 primeiros da cidade.`
+        : `${qtdAvaliacoes(r.avaliacoes)} publicadas e nenhum concorrente comparável na cidade.`;
     case "Nota em estrelas":
       return `Nota ${formatarNota(r.nota)}★ frente à meta de conversão local de 4,7★.`;
     case "Site próprio":
@@ -302,7 +378,7 @@ export function explicacaoCurta(c: SimCriterion, r: SimReport): string {
       }.`;
     case "Presença nas respostas de IA":
       return r.camposBasicosFaltando.length === 0
-        ? "Dados básicos ok (site, horário, telefone, categoria, fotos). Falta reforçar descrição, serviços e avaliações com palavras-chave para o ChatGPT e o Gemini citarem sua empresa."
+        ? "Dados básicos ok (site, horário, telefone, categoria, fotos). Falta reforçar descrição, serviços e avaliações com palavras-chave para o ChatGPT e as outras IAs citarem sua empresa."
         : `${faltamPalavra(r.camposBasicosFaltando.length)} ${r.camposBasicosFaltando.join(", ")} para a IA conseguir descrever seu negócio.`;
     default:
       return c.situacao;
@@ -314,6 +390,10 @@ export function buildReport(args: {
   busca: PlaceLike[];
   posicao: number | null;
   buscaUsada?: string;
+  buscas?: SimBusca[];
+  geradoEm?: string;
+  ia?: SimIa | null;
+  siteCheck?: SimSite | null;
 }): SimReport {
   const { alvo, busca, posicao } = args;
   const buscaUsada = args.buscaUsada?.trim() ?? "";
@@ -378,7 +458,7 @@ export function buildReport(args: {
     prioridade: 1,
     situacao: semComparavel
       ? "Sem concorrentes comparáveis na cidade — não deu para avaliar a quantidade de avaliações"
-      : `${avaliacoes} avaliações — média dos 3 primeiros na cidade: ${mediaTop3}`,
+      : `${qtdAvaliacoes(avaliacoes)} — média dos 3 primeiros na cidade: ${mediaTop3}`,
     status: semComparavel ? "melhorar" : ptsAvaliacoes === PESOS.avaliacoes ? "ok" : ptsAvaliacoes > PESOS.avaliacoes * 0.3 ? "melhorar" : "critico",
   });
 
@@ -430,7 +510,7 @@ export function buildReport(args: {
     criterio: "Presença nas respostas de IA",
     prioridade: 5,
     situacao: camposBasicosFaltando.length === 0
-      ? "Dados básicos ok (site, horário, telefone, categoria, fotos). Falta reforçar descrição, serviços e avaliações com palavras-chave para o ChatGPT e o Gemini citarem sua empresa."
+      ? "Dados básicos ok (site, horário, telefone, categoria, fotos). Falta reforçar descrição, serviços e avaliações com palavras-chave para o ChatGPT e as outras IAs citarem sua empresa."
       : `${cheios} de ${basicos.length} campos que a IA lê estão preenchidos. ${faltamPalavra(camposBasicosFaltando.length)}: ${camposBasicosFaltando.join(", ")}.`,
     status: camposBasicosFaltando.length === 0 ? "melhorar" : cheios >= 2 ? "melhorar" : "critico",
   });
@@ -458,7 +538,7 @@ export function buildReport(args: {
     veredito,
     "",
     `Posição na busca local: ${semComparavel ? "não foi possível comparar com a cidade" : `${rotuloPosicao(posicao)} ("${buscaEfetiva}")`}`,
-    `Nota e avaliações: ${formatarNota(nota)} ★ (${avaliacoes} avaliações)${semComparavel ? "" : ` — média dos 3 primeiros: ${mediaTop3}`}`,
+    `Nota e avaliações: ${formatarNota(nota)} ★ (${qtdAvaliacoes(avaliacoes)})${semComparavel ? "" : ` — média dos 3 primeiros: ${mediaTop3}`}`,
     `Nota do perfil: ${indice} / 100`,
     "",
     posicao !== null && posicao <= 3
@@ -466,7 +546,27 @@ export function buildReport(args: {
       : "Quero o plano para chegar ao Top 3 da minha cidade.",
   ].filter((l) => l !== "").join("\n");
 
+  const fechado = alvo.businessStatus === "CLOSED_TEMPORARILY" ? ("temporario" as const)
+    : alvo.businessStatus === "CLOSED_PERMANENTLY" ? ("definitivo" as const)
+    : undefined;
+  // O Google devolve até 5 avaliações, por relevância. Só dá para afirmar qual é a
+  // mais recente quando ele mostrou todas as que existem.
+  const mostrouTodas = avaliacoes > 0 && (alvo.reviews?.length ?? 0) >= avaliacoes;
+  const ultimaAvaliacao = mostrouTodas ? maisRecente(alvo.reviews) : null;
+  const acoes = acoesDeHoje({
+    fechado, temHorarios, fotos, temSite, social, temTelefone, temCategoria,
+    avaliacoes, mediaTop3: semComparavel ? 0 : mediaTop3, ultimaAvaliacao,
+    agora: args.geradoEm ? new Date(args.geradoEm) : new Date(),
+  });
+
   return {
+    ...(fechado ? { fechado } : {}),
+    ...(ultimaAvaliacao ? { ultimaAvaliacao } : {}),
+    acoes,
+    ...(args.ia ? { ia: args.ia } : {}),
+    ...(args.siteCheck ? { siteCheck: args.siteCheck } : {}),
+    ...(args.buscas && args.buscas.length > 0 ? { buscas: args.buscas } : {}),
+    ...(args.geradoEm ? { geradoEm: args.geradoEm } : {}),
     nome,
     endereco,
     cidade,
@@ -490,4 +590,104 @@ export function buildReport(args: {
     veredito,
     resumo,
   };
+}
+
+/* ------------------------------------------------------------------ */
+/* Avaliações recentes e ações para fazer hoje                         */
+/* ------------------------------------------------------------------ */
+
+const DIA_MS = 24 * 60 * 60 * 1000;
+
+/** Data (ISO) da avaliação mais recente entre as que o Google devolveu, ou null. */
+export function maisRecente(reviews?: { publishTime?: string }[]): string | null {
+  let melhor: number | null = null;
+  for (const r of reviews ?? []) {
+    const t = r.publishTime ? Date.parse(r.publishTime) : Number.NaN;
+    if (Number.isFinite(t) && (melhor === null || t > melhor)) melhor = t;
+  }
+  return melhor === null ? null : new Date(melhor).toISOString();
+}
+
+/** Dias desde a data, inteiro; null se não houver data. */
+export function diasDesde(iso: string | null | undefined, agora = new Date()): number | null {
+  if (!iso) return null;
+  const t = Date.parse(iso);
+  return Number.isFinite(t) ? Math.max(0, Math.floor((agora.getTime() - t) / DIA_MS)) : null;
+}
+
+/** "hoje", "há 12 dias", "há 3 meses", "há mais de 1 ano". */
+export function haQuanto(dias: number | null): string {
+  if (dias === null) return "";
+  if (dias === 0) return "hoje";
+  if (dias < 45) return `há ${dias} ${dias === 1 ? "dia" : "dias"}`;
+  if (dias < 365) {
+    const meses = Math.round(dias / 30);
+    return `há ${meses} ${meses === 1 ? "mês" : "meses"}`;
+  }
+  return "há mais de 1 ano";
+}
+
+/**
+ * Até 3 ações práticas e gratuitas, da mais urgente para a menos.
+ * Só sai ação para falha que os dados públicos mostraram de verdade.
+ */
+export function acoesDeHoje(a: {
+  fechado?: "temporario" | "definitivo" | undefined;
+  temHorarios: boolean;
+  fotos: number;
+  temSite: boolean;
+  social: boolean;
+  temTelefone: boolean;
+  temCategoria: boolean;
+  avaliacoes: number;
+  mediaTop3: number;
+  ultimaAvaliacao: string | null;
+  agora?: Date;
+}): SimAcao[] {
+  const out: SimAcao[] = [];
+  const parado = (diasDesde(a.ultimaAvaliacao, a.agora) ?? 0) > 90;
+
+  if (a.fechado === "temporario") {
+    out.push({
+      titulo: "Confirme no Google que a empresa está aberta",
+      texto: "O perfil aparece como fechado temporariamente. Se você está funcionando, corrija isso no painel do Perfil da Empresa hoje: quem vê fechado nem liga.",
+    });
+  }
+  if (!a.temHorarios) {
+    out.push({
+      titulo: "Publique o horário de funcionamento",
+      texto: "Sem horário, o Google não sabe dizer se você está aberto agora, e o cliente vai para quem mostra.",
+    });
+  }
+  if (a.avaliacoes < a.mediaTop3 || parado || a.avaliacoes === 0) {
+    out.push({
+      titulo: "Peça avaliação aos clientes desta semana",
+      texto: parado
+        ? "A avaliação mais recente já tem mais de 3 meses. Mande o link de avaliação para quem comprou nos últimos dias, para todos, não só para os mais satisfeitos."
+        : "Mande o link de avaliação para quem comprou nos últimos dias, para todos, não só para os mais satisfeitos. Responda cada avaliação que chegar.",
+    });
+  }
+  if (a.fotos < 10) {
+    const faltam = 10 - a.fotos;
+    out.push({
+      titulo: `Publique ${faltam} ${faltam === 1 ? "foto nova" : "fotos novas"}`,
+      texto: "Fachada, ambiente, equipe e o que você vende. É o que o cliente olha antes de decidir.",
+    });
+  }
+  if (!a.temSite) {
+    out.push({
+      titulo: a.social ? "Coloque um site próprio no lugar da rede social" : "Cadastre um site no perfil",
+      texto: "Um site com o que você faz, onde fica e como chamar ajuda o Google e as IAs a entender e indicar sua empresa.",
+    });
+  }
+  if (!a.temTelefone) {
+    out.push({ titulo: "Coloque um telefone no perfil", texto: "Sem telefone, o botão de ligar some do seu perfil." });
+  }
+  if (!a.temCategoria) {
+    out.push({
+      titulo: "Escolha uma categoria específica",
+      texto: "Uma categoria genérica, como Serviços, faz você aparecer menos nas buscas do seu ramo.",
+    });
+  }
+  return out.slice(0, 3);
 }

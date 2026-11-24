@@ -10,7 +10,7 @@ const navLinks = [
   { href: "#faq", label: "FAQ" },
 ] as const;
 
-export function Shell({ children }: { children: ReactNode }) {
+export function Shell({ children, esconderWhats = false }: { children: ReactNode; esconderWhats?: boolean }) {
   return (
     <div id="topo">
       <header className="v2-header">
@@ -33,14 +33,19 @@ export function Shell({ children }: { children: ReactNode }) {
           {navLinks.map((l) => <a key={l.href} href={l.href}>{l.label}</a>)}
           <a href={whatsappLink("Olá! Vim pelo site da V2 Digital.")}>WhatsApp</a>
         </nav>
-        <p className="v2-footer-note">Marketing digital para negócios locais — Imbituba, SC</p>
+        <p className="v2-footer-note">Marketing digital para empresas</p>
       </footer>
-      <a
-        className="site-float-wa"
-        href={whatsappLink("Olá! Vim pelo site da V2 Digital.")}
-      >
-        Falar no WhatsApp
-      </a>
+      {/* Com uma proposta montada, a barra da proposta ocupa o lugar deste botão. */}
+      {esconderWhats ? (
+        <div className="site-proposta-espaco" aria-hidden="true" />
+      ) : (
+        <a
+          className="site-float-wa"
+          href={whatsappLink("Olá! Vim pelo site da V2 Digital.")}
+        >
+          Falar no WhatsApp
+        </a>
+      )}
     </div>
   );
 }

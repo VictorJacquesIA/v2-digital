@@ -6,7 +6,7 @@
 import { pedirJson, type EsquemaGemini } from "../gemini";
 import type { ItemProposta, MetricasSemana } from "./copiloto";
 
-const TOM = `Você escreve em nome do Victor, da V2 Digital, agência de marketing digital de Imbituba/SC para pequenos negócios (Google Meu Negócio, sites e landing pages, tráfego pago, SEO e IA para negócios).
+const TOM = `Você escreve em nome do Victor, da V2 Digital, agência de marketing digital para empresas de todos os portes (Google Meu Negócio, sites e landing pages, tráfego pago, SEO e IA para negócios).
 Regras: português do Brasil; tom consultivo, próximo e direto; sem jargão de venda agressivo, sem emojis, sem promessa de resultado garantido; não invente dados que não estão na entrada; não use termos em inglês quando houver palavra em português.`;
 
 const REGRA_WHATS =
@@ -69,7 +69,7 @@ export function mensagensFollowup(itens: Array<{ id: string; empresa: string; co
 
 export async function rascunhoProposta(entrada: Record<string, unknown>): Promise<{ resumo: string; itens: ItemProposta[]; valor_mensal: number; mensagem: string }> {
   const r = await pedirJson<{ resumo: string; itens: ItemProposta[]; valor_mensal: number; mensagem: string }>(
-    `${TOM}\nPapel: comercial. Monte o rascunho de escopo de uma proposta para o negócio abaixo, com 1 a 3 serviços da V2 que resolvem os pontos fracos dele (ex.: Gestão do Google Meu Negócio, Placa QR + NFC de avaliações, site ou landing page, tráfego pago, social media, IA para o negócio). Para cada serviço, liste entregáveis concretos e um valor mensal sugerido em reais (número), coerente com pequenos negócios do interior de SC. Se a entrada já tiver valor_mensal maior que zero, use-o como referência do total. "resumo": 2 frases sobre o problema e a solução. "mensagem": texto de WhatsApp apresentando a proposta (${REGRA_WHATS}). É um rascunho para o Victor revisar.`,
+    `${TOM}\nPapel: comercial. Monte o rascunho de escopo de uma proposta para o negócio abaixo, com 1 a 3 serviços da V2 que resolvem os pontos fracos dele (ex.: Gestão do Google Meu Negócio, Placa QR + NFC de avaliações, site ou landing page, tráfego pago, social media, IA para o negócio). Para cada serviço, liste entregáveis concretos e um valor mensal sugerido em reais (número), coerente com o porte da empresa e com o mercado brasileiro. Se a entrada já tiver valor_mensal maior que zero, use-o como referência do total. "resumo": 2 frases sobre o problema e a solução. "mensagem": texto de WhatsApp apresentando a proposta (${REGRA_WHATS}). É um rascunho para o Victor revisar.`,
     JSON.stringify(entrada),
     {
       type: "OBJECT",

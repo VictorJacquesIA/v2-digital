@@ -50,6 +50,13 @@
       "when": 1795053853889,
       "tag": "0006_nome_contato_diagnostico",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795053854889,
+      "tag": "0007_diagnostico_link_publico",
+      "breakpoints": true
     }
   ]
 }

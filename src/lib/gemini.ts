@@ -52,6 +52,46 @@ export function erroDeIa(e: unknown): string {
   return "A IA não conseguiu gerar agora. Tente de novo em instantes.";
 }
 
+/**
+ * Texto livre, como um cliente perguntaria à IA. Com GEMINI_BUSCA_WEB=1 a IA consulta
+ * a web (Google Search), o que exige faturamento ativo na chave; sem isso responde com
+ * o que já sabe. Tenta os modelos em ordem e desiste em `limiteMs`.
+ */
+export async function gerarTextoGemini(chave: string, pergunta: string, limiteMs = 20_000): Promise<{ texto: string; buscaWeb: boolean }> {
+  const principal = process.env["GEMINI_MODEL"] || "gemini-3.8-flash";
+  const modelos = [principal, ...MODELOS_RESERVA.filter((m) => m !== principal)];
+  const buscaWeb = process.env["GEMINI_BUSCA_WEB"] === "1";
+  const fim = Date.now() + limiteMs;
+  let ultimo: Error = new GeminiSobrecarregado("Nenhum modelo do Gemini respondeu.");
+  for (const modelo of modelos) {
+    const resta = fim - Date.now();
+    if (resta < 2_000) break;
+    try {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`, {
+        method: "POST",
+        signal: AbortSignal.timeout(resta),
+        headers: { "Content-Type": "application/json", "x-goog-api-key": chave },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: pergunta }] }],
+          ...(buscaWeb ? { tools: [{ google_search: {} }] } : {}),
+        }),
+      });
+      if (!r.ok) {
+        ultimo = Object.assign(new Error(`Gemini ${modelo} ${r.status}`), { status: r.status });
+        if ([404, 429, 500, 503].includes(r.status)) continue;
+        throw ultimo;
+      }
+      const j = (await r.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
+      const texto = (j.candidates?.[0]?.content?.parts ?? []).map((p) => p.text ?? "").join("").trim();
+      if (texto) return { texto, buscaWeb };
+    } catch (e) {
+      if (e instanceof Error && (e.name === "TimeoutError" || e.name === "AbortError")) break;
+      ultimo = e as Error;
+    }
+  }
+  throw ultimo;
+}
+
 async function chamarGemini(chave: string, modelo: string, instrucoes: string, entrada: string, esquema: EsquemaGemini): Promise<string> {
   const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`, {
     method: "POST",

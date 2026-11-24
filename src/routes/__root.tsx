@@ -77,10 +77,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "V2 Digital — Marketing digital para negócios locais" },
+      { title: "V2 Digital — Marketing digital" },
       { name: "description", content: "Anúncios, redes sociais, site e Google Meu Negócio para aparecer na própria cidade." },
       { name: "author", content: "V2 Digital" },
-      { property: "og:title", content: "V2 Digital — Marketing digital para negócios locais" },
+      { property: "og:title", content: "V2 Digital — Marketing digital" },
       { property: "og:description", content: "Seu negócio aparecendo primeiro quando alguém procura perto de você." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
