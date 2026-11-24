@@ -244,15 +244,15 @@ function oQuePesa(r: SimReport) {
   return itens.slice(0, 3);
 }
 
-/** Texto do botão vermelho: cita o volume atual e a meta, nunca posição certa. */
-function ctaTexto(r: SimReport): string {
+/** Frase acima do botão: usa os números do próprio diagnóstico e nunca promete posição. */
+function fechoTexto(r: SimReport): string {
   if (r.posicao !== null && r.posicao <= 3) {
-    return "Quero o plano para manter minha empresa no Top 3 e receber mais ligações";
+    return "Você já está entre os 3 primeiros. O próximo passo é manter o lugar e transformar visita em cliente.";
   }
   if (r.mediaTop3 > r.avaliacoes && r.buscaUsada) {
-    return `Quero o plano para sair de ${r.avaliacoes} para ${r.mediaTop3}+ avaliações e chegar ao Top 3`;
+    return `Hoje são ${qtdAvaliacoes(r.avaliacoes)}. Os 3 primeiros têm ${r.mediaTop3} em média. A V2 mostra por onde começar.`;
   }
-  return "Quero o plano para chegar ao Top 3 da minha cidade";
+  return "A V2 olha o seu perfil por inteiro e mostra por onde começar.";
 }
 
 function dataCurta(iso?: string | null): string {
@@ -588,16 +588,14 @@ export function Relatorio({ r, token }: { r: SimReport; token?: string | undefin
         </div>
       </div>
 
-      <Button variant="primary" className="sim-cta" href={whatsappLink(r.resumo)}>
-        {ctaTexto(r)}
-      </Button>
-      <a
-        className="sim-prefiro"
-        href={whatsappLink("Olá! Vim pelo site da V2 Digital.")}
-      >
-        {RESULTADO.prefiro}
-      </a>
-      <p className="sim-confianca">{RESULTADO.confianca}</p>
+      <div className="sim-fecho sim-nao-imprimir">
+        <h4 className="sim-fecho-titulo">{RESULTADO.leadChamada}</h4>
+        <p className="sim-fecho-texto">{fechoTexto(r)}</p>
+        <Button variant="primary" className="sim-cta" href={whatsappLink(r.resumo)}>
+          {RESULTADO.botao}
+        </Button>
+        <p className="sim-confianca">{RESULTADO.confianca}</p>
+      </div>
     </div>
   );
 }

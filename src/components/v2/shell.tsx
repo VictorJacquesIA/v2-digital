@@ -10,7 +10,7 @@ const navLinks = [
   { href: "#faq", label: "FAQ" },
 ] as const;
 
-export function Shell({ children, esconderWhats = false }: { children: ReactNode; esconderWhats?: boolean }) {
+export function Shell({ children, comBarra = false }: { children: ReactNode; comBarra?: boolean }) {
   return (
     <div id="topo">
       <header className="v2-header">
@@ -35,17 +35,8 @@ export function Shell({ children, esconderWhats = false }: { children: ReactNode
         </nav>
         <p className="v2-footer-note">Marketing digital para empresas</p>
       </footer>
-      {/* Com uma proposta montada, a barra da proposta ocupa o lugar deste botão. */}
-      {esconderWhats ? (
-        <div className="site-proposta-espaco" aria-hidden="true" />
-      ) : (
-        <a
-          className="site-float-wa"
-          href={whatsappLink("Olá! Vim pelo site da V2 Digital.")}
-        >
-          Falar no WhatsApp
-        </a>
-      )}
+      {/* Reserva o espaço da barra da proposta, para ela não cobrir o rodapé. */}
+      {comBarra ? <div className="site-proposta-espaco" aria-hidden="true" /> : null}
     </div>
   );
 }

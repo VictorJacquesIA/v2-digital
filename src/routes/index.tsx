@@ -111,7 +111,7 @@ function Site() {
   }, []);
 
   return (
-    <Shell esconderWhats={escolhidos.length > 0}>
+    <Shell comBarra={escolhidos.length > 0}>
       <section className="site-hero">
         <div className="site-wrap">
           <span className="v2-overline site-overline">{HERO.eyebrow}</span>

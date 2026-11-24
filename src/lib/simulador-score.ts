@@ -542,8 +542,8 @@ export function buildReport(args: {
     `Nota do perfil: ${indice} / 100`,
     "",
     posicao !== null && posicao <= 3
-      ? "Quero o plano para manter minha empresa no Top 3 e receber mais ligações."
-      : "Quero o plano para chegar ao Top 3 da minha cidade.",
+      ? "Quero um plano para manter meu perfil entre os 3 primeiros."
+      : "Quero um plano para melhorar meu perfil no Google.",
   ].filter((l) => l !== "").join("\n");
 
   const fechado = alvo.businessStatus === "CLOSED_TEMPORARILY" ? ("temporario" as const)

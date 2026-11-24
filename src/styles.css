@@ -387,7 +387,6 @@ html { scroll-behavior: smooth; }
 /* Contato: texto à esquerda, formulário em caixa própria à direita */
 .site-form-nota { margin: 0; font-size: 13px; line-height: 20px; color: var(--ink-muted); }
 /* Botão fixo de WhatsApp no celular (nada de vermelho: é o contorno do brand) */
-.site-float-wa { display: none; }
 @media (max-width: 860px) {
   .site-display { font-size: clamp(32px, 5.4vw, 44px); }
   .site-oferta { padding: var(--space-6); }
@@ -439,7 +438,6 @@ html { scroll-behavior: smooth; }
 .sim-table th:first-child { width: 26%; }
 .sim-table th:last-child { width: 12%; }
 .sim-crit { font-weight: 600; color: var(--ink); }
-.sim-cta { margin-top: var(--space-8); width: 100%; }
 /* Veredito: a frase que abre o relatório */
 .sim-veredito { margin: var(--space-6) 0 0; padding: var(--space-6); background: var(--surface-200); border-left: 2px solid var(--ink); font-size: 16px; line-height: 26px; color: var(--ink); max-width: 78ch; }
 /* Barra da nota do perfil */
@@ -464,8 +462,6 @@ html { scroll-behavior: smooth; }
 .sim-lead-row { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: flex-end; margin-top: var(--space-6); padding-top: var(--space-6); border-top: 1px solid var(--border); }
 .sim-lead-row .v2-field { flex: 1 1 220px; width: auto; }
 .sim-lead-row .v2-btn { height: 48px; }
-.sim-prefiro { display: inline-block; margin-top: var(--space-4); color: var(--ink); font-size: 14px; text-underline-offset: 6px; }
-.sim-prefiro:hover { text-decoration: underline; text-decoration-thickness: 1px; }
 .sim-confianca { margin: var(--space-4) 0 0; font-size: 12px; line-height: 16px; color: var(--ink-muted); }
 
 @media (max-width: 768px) {
@@ -531,11 +527,6 @@ html { scroll-behavior: smooth; }
   .v2-footer-logo { height: 36px; }
   .v2-footer-nav { flex-direction: column; flex-wrap: nowrap; gap: 0; justify-self: start; }
   .v2-footer-nav a { display: flex; align-items: center; min-height: 44px; }
-
-  /* 7. Botão fixo de WhatsApp: sempre à mão, sem somar um vermelho novo na tela */
-  .site-float-wa { position: fixed; left: 20px; right: 20px; bottom: 16px; z-index: 40; display: flex; align-items: center; justify-content: center; height: 48px; background: var(--surface-100); color: var(--ink); border: 1px solid var(--ink); border-radius: var(--radius-sm); font: 700 14px/20px var(--font-sans); text-decoration: none; }
-  /* Respiro no fim do rodapé para o botão fixo não cobrir a nota */
-  .v2-footer { padding-bottom: 96px; }
 }
 
 /* ===== Faixa de logos (marquee) ===== */
@@ -817,7 +808,7 @@ details[open].crm-bloco > summary { margin-bottom: 12px; }
 
 /* Impressão / Salvar em PDF: só o relatório, sem botões nem barras */
 @media print {
-  .v2-header, .v2-footer, .site-float-wa, .site-proposta, .site-proposta-espaco, .sim-nao-imprimir, .sim-cta, .sim-prefiro { display: none !important; }
+  .v2-header, .v2-footer, .site-proposta, .site-proposta-espaco, .sim-nao-imprimir { display: none !important; }
   body { background: #fff; }
   .diag-publico { max-width: none; padding: 0; }
   .sim-bloco, .sim-metric, tr { break-inside: avoid; }
@@ -852,7 +843,6 @@ details[open].crm-bloco > summary { margin-bottom: 12px; }
 }
 
 /* Resultado compacto no celular */
-.sim-prefiro { display: inline-flex; align-items: center; min-height: 44px; }
 .sim-bloco .site-table-wrap + .sim-metric-note { margin-top: var(--space-4); }
 @media (max-width: 768px) {
   .sim-bloco .sim-table { margin-top: var(--space-4); }
@@ -870,4 +860,16 @@ details[open].crm-bloco > summary { margin-bottom: 12px; }
   .sim-linha tbody td { width: auto; }
   .sim-linha tbody td + td { margin: 0; }
   .sim-linha tbody td[data-rotulo]::before { display: none; }
+}
+
+/* Fechamento do diagnóstico */
+.sim-fecho { margin-top: var(--space-8); padding: var(--space-8); background: var(--surface-200); border-radius: var(--radius-md); }
+.sim-fecho-titulo { margin: 0; font: 600 24px/30px var(--font-display); letter-spacing: -.02em; color: var(--ink); }
+.sim-fecho-texto { margin: var(--space-2) 0 var(--space-6); max-width: 60ch; font-size: 16px; line-height: 24px; color: var(--ink); }
+.sim-fecho .sim-cta { min-height: 52px; padding: 0 var(--space-8); font-size: 16px; }
+.sim-fecho .sim-confianca { font-size: 13px; line-height: 18px; }
+@media (max-width: 768px) {
+  .sim-fecho { padding: var(--space-6); }
+  .sim-fecho .sim-cta { width: 100%; padding: 0 var(--space-2); }
+  .sim-fecho-titulo { font-size: 20px; line-height: 26px; }
 }

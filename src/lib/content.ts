@@ -200,8 +200,8 @@ export const RESULTADO = {
   concorrentesTitulo: "Quem está na sua frente",
   pesaTitulo: "O que mais pesa",
   criteriosTitulo: "Como está cada critério do seu perfil",
-  leadChamada: "Enviar o plano completo em PDF para o meu WhatsApp",
-  prefiro: "Prefiro falar no WhatsApp",
+  leadChamada: "Quer um plano para melhorar isso?",
+  botao: "Pedir plano no WhatsApp",
   confianca: "Plano em até 24h · Sem compromisso · Usamos só dados públicos do seu perfil.",
 } as const;
 
@@ -257,7 +257,7 @@ export function textosDaPagina(): string[] {
     RESULTADO.pesaTitulo,
     RESULTADO.criteriosTitulo,
     RESULTADO.leadChamada,
-    RESULTADO.prefiro,
+    RESULTADO.botao,
     RESULTADO.confianca,
   ];
 }
